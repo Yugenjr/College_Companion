@@ -18,6 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ref, onValue, remove, get } from "firebase/database";
 import { db } from "@/firebase/config";
+import GroupChat from "@/components/study/GroupChat";
 import {
   Users,
   LogOut,
@@ -336,36 +337,14 @@ export default function StudyRoom() {
             )}
           </motion.div>
 
-          {/* Right: Chat & Notes (Placeholder) */}
+          {/* Right: Chat Interface */}
           <motion.div
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex-1 bg-bgDark2/70 backdrop-blur-xl rounded-2xl border border-white/10 p-8 flex items-center justify-center"
+            className="flex-1 bg-bgDark2/70 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden"
           >
-            <div className="text-center space-y-6">
-              <div className="flex gap-4 justify-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-neonPink/20 to-neonPurple/20 border border-neonPurple/40 flex items-center justify-center">
-                  <MessageSquare className="w-8 h-8 text-neonPurple" />
-                </div>
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-neonPink/20 to-neonPurple/20 border border-neonPink/40 flex items-center justify-center">
-                  <FileText className="w-8 h-8 text-neonPink" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Chat & Notes Coming Soon
-                </h3>
-                <p className="text-white/60 text-sm mb-4">
-                  Live user presence is active! Chat and collaborative notes will be stored in MongoDB.
-                </p>
-                <div className="inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                  <p className="text-orange-400 text-xs">
-                    🚧 MongoDB integration in progress
-                  </p>
-                </div>
-              </div>
-            </div>
+            <GroupChat roomId={roomId} userId={userId} username={username} />
           </motion.div>
         </div>
       </div>

@@ -135,7 +135,7 @@ export default function Register() {
       const user = result.user;
 
       // Check if profile exists in MongoDB
-      const response = await fetch(`http://localhost:5000/api/users/${user.uid}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/users/${user.uid}`);
       
       if (response.ok) {
         // Profile exists - go to dashboard

@@ -26,3 +26,4 @@ dist-ssr
 # Firebase Admin SDK
 backend/firebase-admin-sdk.json
 lmswebapp-synapslogic-firebase-adminsdk-*.json
+.vercel

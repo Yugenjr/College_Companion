@@ -56,7 +56,7 @@ export default function SurvivalPlan() {
 
       console.log('Sending request:', requestBody);
 
-      const response = await fetch('http://localhost:5000/api/survival-plan/generate', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/survival-plan/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function SurvivalPlan() {
       const noteContent = JSON.stringify(plan, null, 2);
       const noteTitle = `Survival Plan - ${goals.substring(0, 50)}`;
 
-      const response = await fetch('http://localhost:5000/api/survival-plan/saveNotes', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/survival-plan/saveNotes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

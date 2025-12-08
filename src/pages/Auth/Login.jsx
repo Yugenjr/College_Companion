@@ -63,7 +63,7 @@ export default function Login() {
       const user = result.user;
       
       // Check if user profile exists in MongoDB
-      const response = await fetch(`http://localhost:5000/api/users/${user.uid}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/users/${user.uid}`);
       
       if (!response.ok) {
         // New Google user - needs to complete profile
