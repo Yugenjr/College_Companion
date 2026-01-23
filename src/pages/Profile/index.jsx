@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import API from '@/services/api';
 import { Camera, Save, LogOut, Settings, User, Mail, Phone, BookOpen, Calendar } from 'lucide-react';
+import Select from '@/components/ui/Select';
 
 const Profile = () => {
   const { currentUser, logout } = useAuth();
@@ -549,18 +550,22 @@ const Profile = () => {
                 <label className="block text-sm font-medium text-white/80 mb-1">
                   Language
                 </label>
-                <select
+                <Select
                   value={settings.language}
-                  onChange={(e) => handleSettingsChange('language', e.target.value)}
-                  className="neon-input w-full px-3 py-2 text-sm"
-                >
-                  <option value="en">English</option>
-                  <option value="es">Spanish</option>
-                  <option value="fr">French</option>
-                  <option value="de">German</option>
-                  <option value="hi">Hindi</option>
-                  <option value="ta">Tamil</option>
-                </select>
+                  onChange={(value) => handleSettingsChange('language', value)}
+                  options={[                    
+                    { value: 'en', label: 'English' },
+                    { value: 'es', label: 'Spanish' },
+                    { value: 'fr', label: 'French' },
+                    { value: 'de', label: 'German' },
+                    { value: 'hi', label: 'Hindi' },
+                    { value: 'ta', label: 'Tamil' },
+                    { value: 'zh', label: 'Chinese' },
+                    { value: 'ja', label: 'Japanese' },
+                    { value: 'ru', label: 'Russian' },
+                  ]}
+                  placeholder="Select language"
+                />
               </div>
             </div>
           </div>
