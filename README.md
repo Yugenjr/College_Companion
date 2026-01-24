@@ -76,5 +76,15 @@ export default defineConfig([
 - Your Friend Name (@friend-username)
 
 We welcome contributions! Feel free to submit pull requests.
-])
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+This means you are free to:
+- Use this software for any purpose
+- Modify and distribute copies
+- Include it in proprietary applications
+
+Under the condition that you include the license and copyright notice.
 ```
