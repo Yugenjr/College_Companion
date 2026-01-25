@@ -1,5 +1,3 @@
-<div align="center">
-
 # 🎓 College Companion
 
 **Your AI-Powered Academic Success Platform**
@@ -10,11 +8,7 @@
 [![GitHub license](https://img.shields.io/github/license/Yugenjr/College_Companion)](https://github.com/Yugenjr/College_Companion/blob/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Yugenjr/College_Companion/pulls)
 
-[Live Demo](https://mernproj1.vercel.app/) • [Features](#-features) • [Tech Stack](#-tech-stack) • [Installation](#-installation) • [Contributing](#-contributing)
-
 </div>
-
----
 
 ## 📖 About
 
@@ -196,6 +190,7 @@ College Companion is a comprehensive full-stack MERN application designed to hel
 ## 📡 API Documentation
 
 ### Main Backend (Port 5000)
+### Main Backend (Port 5000)
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -213,7 +208,30 @@ College Companion is a comprehensive full-stack MERN application designed to hel
 | `/api/questions/generate` | POST | Generate questions |
 | `/api/questions/history` | GET | Get generation history |
 
-For detailed API documentation, see [AUTH_API_DOCUMENTATION.md](./AUTH_API_DOCUMENTATION.md)
+---
+
+## 🧹 Linting & Code Quality
+
+You can also install  
+[eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and  
+[eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom):
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      reactX.configs['recommended-typescript'],
+      reactDom.configs.recommended,
+    ],
+  },
+])
+
 
 ---
 
@@ -342,3 +360,4 @@ Want to contribute? Check out our [Contributing Guidelines](#-contributing) and 
 [⬆ Back to Top](#-college-companion)
 
 </div>
+
