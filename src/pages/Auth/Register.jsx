@@ -218,7 +218,7 @@ export default function Register() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-gray-600 dark:text-gray-300 mt-2"
+              className="text-gray-600 dark:text-neutral-800 mt-2"
             >
               {isGoogleSignIn ? "Complete your profile" : "Create your account"}
             </motion.p>
@@ -239,7 +239,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                 Full Name
               </label>
               <div className="relative">
@@ -251,14 +251,14 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="Enter your full name"
                   disabled={loading}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
 
             {/* College Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                 College Name
               </label>
               <div className="relative">
@@ -270,14 +270,14 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="Enter your college name"
                   disabled={loading}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
 
             {/* Degree */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                 Degree
               </label>
               <div className="relative">
@@ -289,14 +289,14 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="e.g., B.Tech CSE, B.Sc Physics"
                   disabled={loading}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
 
             {/* Age */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                 Age
               </label>
               <div className="relative">
@@ -310,14 +310,14 @@ export default function Register() {
                   min="16"
                   max="100"
                   disabled={loading}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -329,7 +329,7 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="Enter your email"
                   disabled={loading || isGoogleSignIn}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
@@ -338,7 +338,7 @@ export default function Register() {
             {!isGoogleSignIn && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                     Create Password
                   </label>
                   <div className="relative">
@@ -350,13 +350,13 @@ export default function Register() {
                       onChange={handleChange}
                       placeholder="At least 6 characters"
                       disabled={loading}
-                      className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-fuchsia-400 mb-2">
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -368,7 +368,7 @@ export default function Register() {
                       onChange={handleChange}
                       placeholder="Re-enter your password"
                       disabled={loading}
-                      className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-neutral-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -411,7 +411,7 @@ export default function Register() {
                   disabled={loading}
                   whileHover={{ scale: loading ? 1 : 1.02 }}
                   whileTap={{ scale: loading ? 1 : 0.98 }}
-                  className="w-full py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/15 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  className="w-full py-3 bg-white/10 border border-white/20 text-neutral-600 font-semibold rounded-lg hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
