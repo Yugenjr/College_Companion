@@ -1,5 +1,10 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Github, Heart } from 'lucide-react';
+// import { Sparkles, Github, Heart } from 'lucide-react';
+import { Sparkles, Heart,Github, Linkedin, Mail } from 'lucide-react';
+import { FaXTwitter, FaDiscord } from 'react-icons/fa6';
+
+
+
 
 const LandingFooter = () => {
     const currentYear = new Date().getFullYear();
@@ -53,6 +58,60 @@ const LandingFooter = () => {
                             <Github className="w-4 h-4" strokeWidth={2.5} />
                             <span>Star on GitHub</span>
                         </a>
+  <div className="flex items-center gap-3 mt-6">
+    <a
+        href="https://twitter.com/yourusername"
+        target="_blank"
+        className="w-11 h-11 rounded-xl flex items-center justify-center
+                   bg-white/[0.04] border border-white/[0.08]
+                   text-white/50 hover:text-white
+                   hover:border-violet-400/40 hover:bg-white/[0.08]
+                   transition-all duration-300"
+        aria-label="X"
+    >
+        <FaXTwitter className="text-[18px]" />
+    </a>
+
+    <a
+        href="https://linkedin.com/in/yourprofile"
+        target="_blank"
+        className="w-11 h-11 rounded-xl flex items-center justify-center
+                   bg-white/[0.04] border border-white/[0.08]
+                   text-white/50 hover:text-white
+                   hover:border-violet-400/40 hover:bg-white/[0.08]
+                   transition-all duration-300"
+        aria-label="LinkedIn"
+    >
+        <Linkedin className="w-5 h-5" />
+    </a>
+
+    <a
+        href="mailto:yourmail@gmail.com"
+        className="w-11 h-11 rounded-xl flex items-center justify-center
+                   bg-white/[0.04] border border-white/[0.08]
+                   text-white/50 hover:text-white
+                   hover:border-violet-400/40 hover:bg-white/[0.08]
+                   transition-all duration-300"
+        aria-label="Email"
+    >
+        <Mail className="w-5 h-5" />
+    </a>
+
+    <a
+        href="https://discord.gg/yourinvite"
+        target="_blank"
+        className="w-11 h-11 rounded-xl flex items-center justify-center
+                   bg-white/[0.04] border border-white/[0.08]
+                   text-white/50 hover:text-white
+                   hover:border-violet-400/40 hover:bg-white/[0.08]
+                   transition-all duration-300"
+        aria-label="Discord"
+    >
+        <FaDiscord className="text-[18px]" />
+    </a>
+</div>
+
+
                     </div>
 
                     {/* Quick Links */}
