@@ -19,6 +19,74 @@
 ## 📖 About
 
 College Companion is a comprehensive full-stack MERN application designed to help college students excel academically. Powered by advanced AI technologies, it offers intelligent tools for attendance management, syllabus analysis, question generation, and collaborative studying—all in one platform.
+# Features
+
+## Authentication and User Management
+- Google Sign-In using Firebase Authentication
+- Secure user sessions and protected routes
+- First-time onboarding flow for profile setup
+- Persistent user profiles stored in MongoDB
+
+## AI-Powered Academic Tools
+
+### Attendance Advisor
+- Smart attendance tracking
+- AI-based attendance predictions
+- Personalized recommendations to avoid shortage
+
+### Syllabus Essentials Extractor
+- Upload syllabus images or PDFs
+- OCR powered by Tesseract.js
+- AI-generated key topics and important sections
+
+### Question Generator
+- Auto-generate exam-oriented questions
+- Multiple difficulty levels supported
+- Question history saved for revision
+
+### Semester Survival Plan
+- Personalized AI-generated study plans
+- Daily and weekly planning support
+- Access to previously generated plans
+
+## Study Arena (Real-Time Collaboration)
+- Create and join collaborative study rooms
+- Unique room codes for easy sharing
+- Real-time chat with classmates
+- Socket.io-powered live communication
+- Multi-user participation support
+
+## Dashboard and Productivity
+- Personalized academic dashboard
+- Centralized access to all features
+- Quick navigation between tools
+- Profile viewing and updates
+
+## UI and Performance
+- Fully responsive design (mobile and desktop)
+- Modern UI built with TailwindCSS
+- Smooth animations using Framer Motion
+- Fast performance with Vite bundler
+- Clean and accessible component structure
+
+## Backend and System Features
+- RESTful API architecture
+- Modular and scalable backend services
+- Dedicated microservice for question generation
+- MongoDB integration using Mongoose
+- Health-check endpoints for monitoring
+
+## Security and Reliability
+- Secure environment-based configuration
+- Safe handling of API keys and secrets
+- Protected backend routes
+- Scalable and maintainable architecture
+
+## Deployment and Scalability
+- Deployed frontend using Vercel
+- Cloud-ready backend setup
+- Easily extensible feature modules
+
 
 ### ✨ Why College Companion?
 
