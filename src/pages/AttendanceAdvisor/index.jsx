@@ -7,6 +7,7 @@ import PastAttendanceCard from "./components/PastAttendanceCard";
 import LeaveHistoryCard from "./components/LeaveHistoryCard";
 import AbsenceTimelineCard from "./components/AbsenceTimelineCard";
 import DataInputsPanel from "./components/DataInputsPanel";
+import { addActivity, ACTIVITY_TYPES } from "@/services/progressService";
 
 export default function AttendanceAdvisor() {
   const { messages, isLoading, sendMessage } = useGroqChat();
@@ -41,7 +42,15 @@ export default function AttendanceAdvisor() {
       weatherData: {},
     };
 
-    sendMessage(message, contextData);
+    sendMessage(message, contextData, (response) => {
+      // Track attendance advice activity
+      if (response && !response.isError) {
+        addActivity(ACTIVITY_TYPES.ATTENDANCE_ADVICE, {
+          query: message,
+          tool: 'Attendance Advisor',
+        });
+      }
+    });
   };
 
   /**

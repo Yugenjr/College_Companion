@@ -28,6 +28,7 @@ import {
   MessageSquare,
   FileText,
 } from "lucide-react";
+import { addActivity, ACTIVITY_TYPES } from "@/services/progressService";
 
 export default function StudyRoom() {
   const { roomId } = useParams();
@@ -35,6 +36,7 @@ export default function StudyRoom() {
   const [roomUsers, setRoomUsers] = useState([]);
   const [isOnline, setIsOnline] = useState(true);
   const [roomCreatedAt, setRoomCreatedAt] = useState(null);
+  const sessionStartTime = useRef(Date.now());
 
   const userId = localStorage.getItem("studyArena_userId");
   const username = localStorage.getItem("studyArena_username");
@@ -142,6 +144,17 @@ export default function StudyRoom() {
       // Clear localStorage
       localStorage.removeItem("studyArena_currentRoom");
 
+      // Track study session
+      const sessionDuration = Math.round((Date.now() - sessionStartTime.current) / 1000 / 60); // in minutes
+      if (sessionDuration >= 1) { // Only track sessions of 1+ minutes
+        addActivity(ACTIVITY_TYPES.STUDY_SESSION, {
+          roomCode: roomId,
+          roomName: `Room ${roomId}`,
+          duration: sessionDuration,
+          tool: 'Study Arena',
+        });
+      }
+
       // Navigate back
       navigate("/study-arena");
     } catch (err) {
@@ -212,7 +225,7 @@ export default function StudyRoom() {
             opacity: [0.3, 0.5, 0.3],
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-neonPink/20 to-transparent rounded-full blur-3xl"
+          className="absolute -top-1/2 -left-1/2 w-full h-full bg-linear-to-br from-neonPink/20 to-transparent rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -226,7 +239,7 @@ export default function StudyRoom() {
             ease: "linear",
             delay: 1,
           }}
-          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-neonPurple/20 to-transparent rounded-full blur-3xl"
+          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-linear-to-tl from-neonPurple/20 to-transparent rounded-full blur-3xl"
         />
       </div>
 
@@ -241,7 +254,7 @@ export default function StudyRoom() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neonPink to-neonPurple flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-neonPink to-neonPurple flex items-center justify-center">
                   <Users className="w-5 h-5 text-white" />
                 </div>
                 Study Room
@@ -310,7 +323,7 @@ export default function StudyRoom() {
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                     className="bg-bgDark3/50 backdrop-blur-xl border border-white/10 rounded-xl p-3 flex items-center gap-3"
                   >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neonPink/30 to-neonPurple/30 border border-neonPurple/40 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-neonPink/30 to-neonPurple/30 border border-neonPurple/40 flex items-center justify-center shrink-0">
                       <UserIcon className="w-5 h-5 text-neonPurple" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -324,7 +337,7 @@ export default function StudyRoom() {
                         Joined {new Date(user.joinedAt).toLocaleTimeString()}
                       </p>
                     </div>
-                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
                   </motion.div>
                 ))}
               </AnimatePresence>

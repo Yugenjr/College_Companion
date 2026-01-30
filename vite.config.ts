@@ -21,11 +21,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         ws: true,
-        configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
+        configure: (proxy) => {
+          proxy.on('error', (err) => {
             console.log('proxy error', err);
           });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
             // Route question generator requests to port 5001
             if (req.url?.includes('/api/questions')) {
               proxyReq.path = req.url;

@@ -11,6 +11,7 @@ import AttendanceAdvisor from "./pages/AttendanceAdvisor";
 import SemesterSurvival from "./pages/SemesterSurvival";
 import StudyArenaHub from "./pages/StudyArena";
 import RoomPage from "./pages/StudyArena/RoomPage.jsx";
+import ProgressDashboard from "./pages/ProgressDashboard";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
@@ -43,6 +44,7 @@ function App() {
                 </PrivateRoute>
               }>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/progress" element={<ProgressDashboard />} />
                 <Route path="/attendance-advisor" element={<AttendanceAdvisor />} />
                 <Route path="/semester-survival" element={<SemesterSurvival />} />
                 <Route path="/study-arena" element={<StudyArenaHub />} />

@@ -5,6 +5,7 @@ import { LogIn, Loader2, AlertCircle, Hash } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRoom as useRoomContext } from "@/contexts/RoomContext";
 import { joinRoom } from "@/firebase/roomService";
+import { addActivity, ACTIVITY_TYPES } from "@/services/progressService";
 
 export default function JoinRoom() {
   const navigate = useNavigate();
@@ -28,6 +29,13 @@ export default function JoinRoom() {
 
       const userName = userProfile?.fullName || currentUser?.email || "Anonymous";
       await joinRoom(roomId.trim(), currentUser.uid, userName);
+
+      // Track study room join activity
+      addActivity(ACTIVITY_TYPES.STUDY_ROOM_JOINED, {
+        roomCode: roomId.trim(),
+        roomName: `Room ${roomId.trim()}`,
+        tool: 'Study Arena',
+      });
 
       enterRoom(roomId.trim(), {});
       navigate(`/study-arena/room/${roomId.trim()}`);
@@ -57,7 +65,7 @@ export default function JoinRoom() {
 
       {error && (
         <div className="mb-4 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" />
           <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
         </div>
       )}
@@ -85,7 +93,7 @@ export default function JoinRoom() {
           disabled={loading || !roomId.trim()}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full py-3 md:py-4 px-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+          className="w-full py-3 md:py-4 px-6 bg-linear-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
         >
           {loading ? (
             <>

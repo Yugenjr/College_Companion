@@ -20,8 +20,9 @@ export function useGroqChat() {
    * Send a message to Groq API with attendance context
    * @param {string} userMessage - The user's message
    * @param {object} contextData - Attendance data context
+   * @param {function} onResponse - Callback when response is received
    */
-  const sendMessage = useCallback(async (userMessage, contextData = {}) => {
+  const sendMessage = useCallback(async (userMessage, contextData = {}, onResponse) => {
     if (!userMessage.trim()) return;
 
     // Add user message to history
@@ -86,6 +87,11 @@ export function useGroqChat() {
       };
       
       setMessages(prev => [...prev, aiMsg]);
+      
+      // Call onResponse callback if provided
+      if (onResponse) {
+        onResponse(aiMsg);
+      }
     } catch (err) {
       console.error("Chat error:", err);
       setError(err.message);

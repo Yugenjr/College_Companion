@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, FileText, Copy, Check, Save, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import API from "@/services/api";
+import { addActivity, ACTIVITY_TYPES } from "@/services/progressService";
 
 export default function QuestionGenerator() {
   const { currentUser } = useAuth();
@@ -50,6 +51,14 @@ export default function QuestionGenerator() {
           typeof q === 'string' ? q : q.question || JSON.stringify(q)
         );
         setQuestions(questionTexts);
+
+        // Track progress
+        addActivity(ACTIVITY_TYPES.QUESTION_GENERATED, {
+          topic: syllabus.substring(0, 50) + (syllabus.length > 50 ? '...' : ''),
+          questionType,
+          count: questionTexts.length,
+          tool: 'Question Generator',
+        });
       } else {
         throw new Error("No questions generated");
       }
@@ -128,7 +137,7 @@ export default function QuestionGenerator() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3 flex items-start gap-3"
         >
-          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
           <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
         </motion.div>
       )}
@@ -140,7 +149,7 @@ export default function QuestionGenerator() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl px-4 py-3 flex items-start gap-3"
         >
-          <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+          <Check className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
           <p className="text-sm text-green-700 dark:text-green-300">Questions saved successfully!</p>
         </motion.div>
       )}
@@ -152,7 +161,7 @@ export default function QuestionGenerator() {
         className="neon-card p-6"
       >
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -199,7 +208,7 @@ export default function QuestionGenerator() {
               <button
                 onClick={handleGenerate}
                 disabled={isGenerating || !syllabus.trim()}
-                className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 dark:disabled:from-gray-700 dark:disabled:to-gray-800 rounded-xl text-white text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                className="w-full px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 dark:disabled:from-gray-700 dark:disabled:to-gray-800 rounded-xl text-white text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
               >
                 {isGenerating ? (
                   <>
@@ -252,7 +261,7 @@ export default function QuestionGenerator() {
                 className="bg-[#F8F9FB] dark:bg-[#0D1117] rounded-xl p-4 hover:shadow-md hover:bg-[#F8F9FB] dark:hover:bg-[#0D1117] transition-all duration-200 group border border-[#E5E7EB] dark:border-[#2A2F35]"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-sm border border-blue-200 dark:border-blue-800">
+                  <div className="shrink-0 w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-sm border border-blue-200 dark:border-blue-800">
                     {index + 1}
                   </div>
                   <div className="flex-1">
@@ -262,7 +271,7 @@ export default function QuestionGenerator() {
                   </div>
                   <button
                     onClick={() => copyToClipboard(question, index)}
-                    className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#F8F9FB] dark:bg-[#0D1117] hover:bg-[#E5E7EB] dark:hover:bg-[#2A2F35] flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100"
+                    className="shrink-0 w-8 h-8 rounded-lg bg-[#F8F9FB] dark:bg-[#0D1117] hover:bg-[#E5E7EB] dark:hover:bg-[#2A2F35] flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100"
                     title="Copy question"
                   >
                     {copiedIndex === index ? (
@@ -281,7 +290,7 @@ export default function QuestionGenerator() {
             <button 
               onClick={handleSaveAsNotes}
               disabled={isSaving}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 dark:disabled:from-gray-700 dark:disabled:to-gray-800 rounded-xl text-white text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              className="px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 dark:disabled:from-gray-700 dark:disabled:to-gray-800 rounded-xl text-white text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
             >
               {isSaving ? (
                 <>

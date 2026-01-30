@@ -6,6 +6,7 @@ import {
   BookOpen,
   MessageCircle,
   User,
+  TrendingUp,
   Sun,
   Moon,
 } from "lucide-react";
@@ -14,6 +15,7 @@ import { useTheme } from "../contexts/ThemeContext";
 
 const MENU = [
   { label: "Dashboard", path: "/dashboard", icon: Home },
+  { label: "My Progress", path: "/progress", icon: TrendingUp },
   { label: "Attendance Advisor", path: "/attendance-advisor", icon: Clock },
   { label: "Semester Survival", path: "/semester-survival", icon: BookOpen },
   { label: "Study Arena", path: "/study-arena", icon: MessageCircle },
@@ -41,7 +43,7 @@ export default function Sidebar() {
         <div className="px-2 flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <motion.div
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg"
+              className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -117,7 +119,7 @@ export default function Sidebar() {
       {/* Mobile Bottom Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-neonPurple/20 shadow-neon-purple" style={{ background: 'rgba(13, 13, 13, 0.95)', backdropFilter: 'blur(12px)' }}>
         <ul className="flex items-center justify-around px-2 py-2">
-          {MENU.slice(0, 4).map((m) => (
+          {MENU.slice(0, 5).map((m) => (
             <li key={m.path} className="flex-1">
               <SidebarItem
                 icon={m.icon}
