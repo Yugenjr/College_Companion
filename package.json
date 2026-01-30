@@ -1,7 +1,8 @@
 {
-  "name": "mernproj1",
-  "private": true,
+  "name": "college-companion",
   "version": "0.0.0",
+  "description": "A comprehensive college companion platform with AI-powered features",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

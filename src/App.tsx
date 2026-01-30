@@ -13,6 +13,7 @@ import StudyArenaHub from "./pages/StudyArena";
 import RoomPage from "./pages/StudyArena/RoomPage.jsx";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
+import Landing from "./pages/Landing.jsx";
 
 function App() {
   return (
@@ -21,13 +22,13 @@ function App() {
         <AuthProvider>
           <RoomProvider>
             <Routes>
-              {/* Redirect root to login */}
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              
+              {/* Landing Page */}
+              <Route path="/" element={<Landing />} />
+
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              
+
               {/* Onboarding - Protected */}
               <Route path="/onboarding" element={
                 <PrivateRoute>
@@ -48,7 +49,7 @@ function App() {
                 <Route path="/study-arena/room/:roomCode" element={<RoomPage />} />
                 <Route path="/profile" element={<Profile />} />
               </Route>
-              
+
               {/* Catch all - redirect to login */}
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
