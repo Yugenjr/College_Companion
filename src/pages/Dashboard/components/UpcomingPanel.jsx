@@ -56,7 +56,7 @@ export default function UpcomingPanel() {
                 Next
               </div>
             )}
-            
+
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-semibold text-white text-lg">{cls.subject}</h3>
@@ -71,7 +71,7 @@ export default function UpcomingPanel() {
                   </span>
                 </div>
               </div>
-              
+
               <div className={`w-3 h-3 rounded-full ${cls.dotColor} shadow-neon-blue`} />
             </div>
           </motion.div>
