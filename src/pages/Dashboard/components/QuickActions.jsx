@@ -54,7 +54,7 @@ export default function QuickActions() {
               <div className={`p-3 rounded-xl transition-all duration-300 ${action.bgColor}`}>
                 <action.icon className={`w-6 h-6 transition-all duration-300 ${action.iconColor}`} />
               </div>
-              
+
               <div className="flex-1">
                 <h3 className="font-semibold text-white text-base">
                   {action.label}

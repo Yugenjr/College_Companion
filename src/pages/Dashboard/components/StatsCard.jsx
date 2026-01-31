@@ -20,7 +20,7 @@ export default function StatsCard({ icon: Icon, title, value, progress, color = 
           </div>
         </div>
       </div>
-      
+
       {progress !== undefined && (
         <div className="mt-4">
           <div className="flex items-center justify-between text-xs font-medium text-white/70 mb-2">

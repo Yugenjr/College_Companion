@@ -19,18 +19,18 @@ body {
   :root {
     --radius: 0.5rem;
   }
-  
+
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
-  
+
   html {
     background: #050505 !important;
     color-scheme: dark;
   }
-  
+
   body {
     @apply text-white font-body antialiased;
     background: #050505 !important;
@@ -39,7 +39,7 @@ body {
     overflow-x: hidden;
     color-scheme: dark;
   }
-  
+
   #root {
     background: #050505 !important;
     min-height: 100vh;
@@ -47,28 +47,29 @@ body {
 }
 
 @layer components {
+
   /* Neon Text */
   .neon-text {
     @apply text-transparent bg-clip-text bg-primary-gradient;
     text-shadow: 0 0 20px rgba(157, 78, 221, 0.6), 0 0 30px rgba(76, 201, 240, 0.4);
   }
-  
+
   /* Neon Border */
   .neon-border {
     @apply border border-neonPurple;
     box-shadow: 0 0 15px rgba(157, 78, 221, 0.5), inset 0 0 15px rgba(157, 78, 221, 0.2);
   }
-  
+
   .neon-border-blue {
     @apply border border-neonBlue;
     box-shadow: 0 0 15px rgba(76, 201, 240, 0.5), inset 0 0 15px rgba(76, 201, 240, 0.2);
   }
-  
+
   .neon-border-pink {
     @apply border border-neonPink;
     box-shadow: 0 0 15px rgba(255, 94, 205, 0.5), inset 0 0 15px rgba(255, 94, 205, 0.2);
   }
-  
+
   /* Neon Card */
   .neon-card {
     background: rgba(13, 13, 13, 0.7);
@@ -77,13 +78,13 @@ body {
     box-shadow: 0 0 20px rgba(157, 78, 221, 0.15), 0 8px 32px 0 rgba(31, 38, 135, 0.2);
     transition: all 0.3s ease;
   }
-  
+
   .neon-card:hover {
     @apply border-neonPurple/50;
     box-shadow: 0 0 25px rgba(157, 78, 221, 0.3), 0 8px 32px 0 rgba(31, 38, 135, 0.3);
     transform: translateY(-2px);
   }
-  
+
   /* Glass Card */
   .glass-card {
     background: rgba(0, 0, 0, 0.5);
@@ -91,20 +92,20 @@ body {
     @apply rounded-neon-lg p-6 border border-white/10;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
-  
+
   /* Neon Button */
   .neon-button {
     @apply px-6 py-3 rounded-neon font-semibold text-white bg-primary-gradient;
     @apply transition-all duration-300 hover:scale-105 hover:shadow-neon-glow;
     @apply active:scale-95;
   }
-  
+
   .neon-button-outline {
     @apply px-6 py-3 rounded-neon font-semibold text-white bg-transparent border-2 border-neonPurple;
     @apply transition-all duration-300 hover:bg-neonPurple/20 hover:shadow-neon-purple;
     @apply active:scale-95;
   }
-  
+
   /* Neon Input */
   .neon-input {
     @apply w-full px-4 py-3 border border-glassBorder rounded-neon;
@@ -113,67 +114,134 @@ body {
     @apply focus:outline-none focus:border-neonPurple focus:shadow-neon-purple;
     @apply transition-all duration-300;
   }
-  
+
   .neon-input:focus {
     background: rgba(13, 13, 13, 0.7);
   }
-  
-  /* Glow Effects */
-  .glow-purple {
-    text-shadow: 0 0 10px rgba(157, 78, 221, 0.8), 0 0 20px rgba(157, 78, 221, 0.5);
+
+  /* Premium Theme Tokens */
+  .bg-dark-deep {
+    background: radial-gradient(circle at top center, #1b1b3a 0%, #050505 100%);
   }
-  
-  .glow-blue {
-    text-shadow: 0 0 10px rgba(76, 201, 240, 0.8), 0 0 20px rgba(76, 201, 240, 0.5);
+
+  .text-glow-blue {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
   }
-  
-  .glow-pink {
-    text-shadow: 0 0 10px rgba(255, 94, 205, 0.8), 0 0 20px rgba(255, 94, 205, 0.5);
+
+  .glass-card-premium {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-card-premium:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .btn-premium-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-premium-primary:hover {
+    box-shadow: 0 0 50px rgba(59, 130, 246, 0.6);
+    transform: translateY(-2px);
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  .font-outfit {
+    font-family: 'Outfit', sans-serif;
   }
 }
 
 @layer utilities {
+  .bg-grid-white {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='white' stroke-opacity='0.03'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+
   /* Scrollbar Styles */
   .scrollbar-neon::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   .scrollbar-neon::-webkit-scrollbar-track {
     background: #0d0d0d;
   }
-  
+
   .scrollbar-neon::-webkit-scrollbar-thumb {
     @apply bg-neonPurple/50 rounded-full;
   }
-  
+
   .scrollbar-neon::-webkit-scrollbar-thumb:hover {
     @apply bg-neonPurple;
   }
-  
+
   /* Transitions */
   .transition-neon {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-/* Global Scrollbar */
+/* Global Scrollbar Overhaul */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 10px !important;
+  height: 10px !important;
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #050505 !important;
+  border-radius: 10px !important;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #9d4edd, #4cc9f0);
-  border-radius: 10px;
+  background: linear-gradient(to bottom, #3b82f6, #6366f1) !important;
+  border-radius: 10px !important;
+  border: 2px solid #050505 !important;
+  /* Creates a padding effect around the thumb */
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #b569f5, #6dd5f6);
+  background: linear-gradient(to bottom, #60a5fa, #818cf8) !important;
+}
+
+/* Hide scrollbar buttons (arrows) for a cleaner look */
+::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #050505;
 }
 
 /* Selection */

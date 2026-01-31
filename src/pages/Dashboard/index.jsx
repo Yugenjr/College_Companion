@@ -85,12 +85,12 @@ export default function Dashboard() {
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={attendanceData}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
-            <XAxis 
-              dataKey="month" 
+            <XAxis
+              dataKey="month"
               stroke="#ffffff"
               style={{ fontSize: '12px' }}
             />
-            <YAxis 
+            <YAxis
               stroke="#ffffff"
               style={{ fontSize: '12px' }}
             />
