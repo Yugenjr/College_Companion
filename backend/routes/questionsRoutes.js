@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import { verifyFirebaseToken } from '../middleware/auth.js';
+import { getOrCreateUser } from '../utils/userHelpers.js';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const router = express.Router();
  */
 router.post('/', verifyFirebaseToken, async (req, res) => {
   try {
-    const { uid } = req.user;
+    const { uid, email } = req.user;
     const { question, answer } = req.body;
 
     if (!question) {
@@ -20,15 +21,7 @@ router.post('/', verifyFirebaseToken, async (req, res) => {
       });
     }
 
-    let user = await User.findOne({ uid });
-    if (!user) {
-      user = new User({
-        _id: uid,
-        uid,
-        email: req.user.email || undefined,
-        profile: { email: req.user.email }
-      });
-    }
+    const user = await getOrCreateUser(uid, email);
 
     user.questionGenerator.savedQuestions.push({
       question,
