@@ -11,13 +11,23 @@ const userSchema = new mongoose.Schema({
   uid: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    index: true
   },
-  
+
+  // Root Email Field (Best Practice for uniqueness)
+  email: {
+    type: String,
+    unique: true,
+    sparse: true, // Allows multiple null values without conflict
+    trim: true,
+    lowercase: true
+  },
+
   // User Profile Information
   profile: {
     fullName: { type: String, default: '' },
-    email: { type: String, required: true },
+    email: { type: String }, // Kept for backward compatibility
     photoURL: { type: String, default: '' },
     phone: { type: String, default: '' },
     department: { type: String, default: '' },
@@ -28,7 +38,7 @@ const userSchema = new mongoose.Schema({
     age: { type: Number, default: null },
     updatedAt: { type: Date, default: Date.now }
   },
-  
+
   // Survival Kit - Essentials, Revision Strategies, Survival Plans
   survivalKit: {
     essentials: [{
@@ -50,7 +60,7 @@ const userSchema = new mongoose.Schema({
       createdAt: { type: Date, default: Date.now }
     }]
   },
-  
+
   // Notes Repository
   notesRepository: [{
     _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
@@ -59,7 +69,7 @@ const userSchema = new mongoose.Schema({
     pdfURL: { type: String, default: '' },
     createdAt: { type: Date, default: Date.now }
   }],
-  
+
   // Attendance Advisor
   attendanceAdvisor: {
     history: [{
@@ -72,7 +82,7 @@ const userSchema = new mongoose.Schema({
       createdAt: { type: Date, default: Date.now }
     }]
   },
-  
+
   // Question Generator
   questionGenerator: {
     savedQuestions: [{

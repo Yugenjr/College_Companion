@@ -7,9 +7,20 @@ import User from '../models/User.js';
 export const createUser = async (req, res) => {
   try {
     const { uid, email, name } = req.user;
-    
-    // Check if user already exists
-    const existingUser = await User.findOne({ uid });
+
+    // Validation
+    if (!uid) {
+      return res.status(400).json({
+        success: false,
+        error: 'UID is required'
+      });
+    }
+
+    // Check if user already exists (by UID or Email)
+    const existingUser = await User.findOne({
+      $or: [{ uid }, ...(email ? [{ email }] : [])]
+    });
+
     if (existingUser) {
       return res.json({
         success: true,
@@ -18,12 +29,14 @@ export const createUser = async (req, res) => {
       });
     }
 
-    // Create new user with uid as _id
+    // Create new user with root-level email
     const newUser = new User({
       _id: uid,
+      uid: uid,
+      email: email || undefined, // undefined tells Mongo to ignore (sparse index friendly)
       profile: {
         name: name || '',
-        email: email
+        email: email // Keep for backward compatibility
       }
     });
 
@@ -35,6 +48,16 @@ export const createUser = async (req, res) => {
       user: newUser
     });
   } catch (error) {
+    // Handle duplicate key errors gracefully
+    if (error.code === 11000) {
+      console.error('⚠️ Duplicate Key Error:', error.keyValue);
+      return res.status(409).json({
+        success: false,
+        error: 'User already exists (Duplicate Key)',
+        details: error.keyValue
+      });
+    }
+
     console.error('❌ Create user error:', error.message);
     res.status(500).json({
       success: false,
@@ -53,7 +76,7 @@ export const getUser = async (req, res) => {
     const { uid } = req.params;
 
     const user = await User.findById(uid);
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -107,7 +130,7 @@ export const updateSection = async (req, res) => {
     }
 
     const user = await User.findById(uid);
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
