@@ -28,11 +28,24 @@ export const initializeFirebaseAdmin = () => {
     }
     // Option 2: Load from environment variables
     else if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+
+      let privateKey = process.env.FIREBASE_PRIVATE_KEY;
+
+      // FIX: Clean up the key if it was pasted with quotes or bad formatting
+      if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+        privateKey = privateKey.slice(1, -1);
+      }
+
+      // FIX: Convert literal "\n" to actual newlines if present
+      if (privateKey.includes('\\n')) {
+        privateKey = privateKey.replace(/\\n/g, '\n');
+      }
+
       serviceAccount = {
         type: 'service_account',
         project_id: process.env.FIREBASE_PROJECT_ID,
         private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-        private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        private_key: privateKey,
         client_email: process.env.FIREBASE_CLIENT_EMAIL,
         client_id: process.env.FIREBASE_CLIENT_ID,
         auth_uri: 'https://accounts.google.com/o/oauth2/auth',
@@ -53,7 +66,7 @@ export const initializeFirebaseAdmin = () => {
 
     console.log('✅ Firebase Admin SDK initialized');
     console.log(`📦 Project: ${serviceAccount.project_id}`);
-    
+
     return firebaseApp;
   } catch (error) {
     console.error('❌ Firebase Admin initialization error:', error.message);
@@ -92,10 +105,10 @@ export const getAuth = () => {
   return getFirebaseAdmin().auth();
 };
 
-export default { 
-  initializeFirebaseAdmin, 
-  getFirebaseAdmin, 
-  getFirestore, 
-  getDatabase, 
-  getAuth 
+export default {
+  initializeFirebaseAdmin,
+  getFirebaseAdmin,
+  getFirestore,
+  getDatabase,
+  getAuth
 };
