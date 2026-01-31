@@ -16,7 +16,7 @@
 
 ---
 
-## 📖 About
+## About
 
 College Companion is a comprehensive full-stack MERN application designed to help college students excel academically. Powered by advanced AI technologies, it offers intelligent tools for attendance management, syllabus analysis, question generation, and collaborative studying—all in one platform.
 
@@ -29,7 +29,7 @@ College Companion is a comprehensive full-stack MERN application designed to hel
 
 ---
 
-## 🚀 Features
+## Features
 
 ### 🔐 Authentication & Security
 - Firebase Authentication with Google Sign-In
