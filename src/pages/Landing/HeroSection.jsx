@@ -1,370 +1,160 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowRight, ChevronDown } from 'lucide-react';
+import { Sparkles, ArrowRight, CheckCircle2, Zap, Layout, BookOpen, Users } from 'lucide-react';
 import dashboardPreview from '../../assets/dashboard-image.webp';
 
 const HeroSection = () => {
     const navigate = useNavigate();
 
-    const scrollToFeatures = () => {
-        document.getElementById('features')?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    };
-
     return (
-        <section className="relative min-h-screen flex flex-col">
-            {/* Premium background effects */}
-            <div className="absolute inset-0 overflow-hidden">
-                {/* Deep gradient base */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#13111c] to-[#0a0a0f]" />
-
-                {/* Animated gradient orbs */}
-                <motion.div
-                    className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(124,58,237,0) 70%)'
-                    }}
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.2, 0.3, 0.2],
-                    }}
-                    transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-                <motion.div
-                    className="absolute top-1/4 -right-40 w-[500px] h-[500px] rounded-full opacity-20 blur-3xl"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, rgba(59,130,246,0) 70%)'
-                    }}
-                    animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.2, 0.25, 0.2],
-                    }}
-                    transition={{
-                        duration: 10,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-                <motion.div
-                    className="absolute bottom-0 left-1/3 w-[550px] h-[550px] rounded-full opacity-15 blur-3xl"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(236,72,153,0.4) 0%, rgba(236,72,153,0) 70%)'
-                    }}
-                    animate={{
-                        scale: [1, 1.1, 1],
-                        opacity: [0.15, 0.25, 0.15],
-                    }}
-                    transition={{
-                        duration: 12,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-
-                {/* Grid pattern overlay */}
-                <div
-                    className="absolute inset-0 opacity-[0.02]"
-                    style={{
-                        backgroundImage: `
-                            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
-                        `,
-                        backgroundSize: '100px 100px'
-                    }}
-                />
+        <section className="relative pt-32 pb-20 overflow-hidden bg-black">
+            {/* Background elements */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-blue-600/10 blur-[120px] rounded-full opacity-50" />
+                <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/10 blur-[100px] rounded-full opacity-30" />
+                <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-600/10 blur-[100px] rounded-full opacity-20" />
             </div>
 
-            {/* Premium Navigation */}
-            <nav className="relative z-50 border-b border-white/[0.06] backdrop-blur-2xl bg-[#0a0a0f]/80">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16 sm:h-20">
-                        {/* Logo */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                            className="flex items-center gap-2 sm:gap-3 group cursor-pointer"
-                        >
-                            <div className="relative">
-                                <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-                                <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-2xl shadow-violet-500/50">
-                                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={2.5} />
-                                </div>
-                            </div>
-                            <div>
-                                <span className="text-base sm:text-xl font-bold text-white tracking-tight" style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}>
-                                    College Companion
-                                </span>
-                                <div className="hidden sm:block text-[9px] text-white/30 uppercase tracking-[0.15em] font-medium">Academic Excellence Platform</div>
-                            </div>
-                        </motion.div>
-
-                        {/* Navigation Buttons */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                            className="flex items-center gap-2 sm:gap-3"
-                        >
-                            <button
-                                onClick={() => navigate('/login')}
-                                className="px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white/70 hover:text-white transition-all duration-300 rounded-lg sm:rounded-xl hover:bg-white/[0.04]"
-                                style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                            >
-                                Sign In
-                            </button>
-                            <button
-                                onClick={() => navigate('/register')}
-                                className="group relative px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                                style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                <span className="relative flex items-center gap-1 sm:gap-2">
-                                    Get Started
-                                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
-                                </span>
-                            </button>
-                        </motion.div>
-                    </div>
-                </div>
-            </nav>
-
-            {/* Hero Content */}
-            <div className="relative z-10 flex-1 flex items-center">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24">
-                    <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
-                        {/* Left Content */}
-                        <div className="text-center lg:text-left space-y-6 sm:space-y-8">
-                            {/* Premium Badge */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                className="inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl group hover:bg-white/[0.05] hover:border-white/[0.12] transition-all duration-500"
-                            >
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500 shadow-lg shadow-violet-500/50"></span>
-                                </span>
-                                <span className="text-xs sm:text-sm text-white/60 font-semibold tracking-tight" style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}>
-                                    Powered by Groq, Gemini & Perplexity AI
-                                </span>
-                            </motion.div>
-
-                            {/* Main Headline */}
-                            <motion.h1
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-[-0.02em]"
-                                style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                            >
-                                <span className="text-white">Transform Your</span>
-                                <br />
-                                <span className="relative inline-block mt-1 sm:mt-2">
-                                    <span className="absolute inset-0 blur-xl sm:blur-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 opacity-30" />
-                                    <span className="relative bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent whitespace-nowrap">
-                                        Academic Journey
-                                    </span>
-                                </span>
-                            </motion.h1>
-
-                            {/* Subheadline */}
-                            <motion.p
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                                className="text-base sm:text-lg md:text-xl text-white/50 leading-relaxed max-w-xl lg:max-w-none mx-auto lg:mx-0"
-                                style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                            >
-                                AI-powered attendance tracking, syllabus extraction, question generation, and real-time study collaboration—your complete academic toolkit.
-                            </motion.p>
-
-                            {/* CTA Buttons */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                                className="flex flex-col sm:flex-row items-center lg:items-start gap-3 sm:gap-4"
-                            >
-                                <button
-                                    onClick={() => navigate('/register')}
-                                    className="w-full sm:w-auto group relative px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-2xl"
-                                    style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 rounded-xl sm:rounded-2xl" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    <div className="absolute inset-0 rounded-xl sm:rounded-2xl shadow-[0_0_50px_rgba(124,58,237,0.5)] group-hover:shadow-[0_0_80px_rgba(124,58,237,0.6)] transition-all duration-300" />
-                                    <span className="relative flex items-center justify-center gap-2 text-sm sm:text-base">
-                                        Start Free Today
-                                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
-                                    </span>
-                                </button>
-                                <button
-                                    onClick={scrollToFeatures}
-                                    className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white/[0.04] border border-white/[0.08] backdrop-blur-xl rounded-xl sm:rounded-2xl font-bold text-white hover:bg-white/[0.08] hover:border-white/[0.12] transition-all duration-300 text-sm sm:text-base"
-                                    style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                                >
-                                    Explore Features
-                                </button>
-                            </motion.div>
-
-                            {/* Trust Indicators */}
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.7, duration: 0.8 }}
-                                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-white/40"
-                                style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                            >
-                                <div className="flex items-center gap-2 sm:gap-2.5">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-lg shadow-violet-500/50" />
-                                    <span className="font-semibold">100% Free</span>
-                                </div>
-                                <div className="flex items-center gap-2 sm:gap-2.5">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/50" />
-                                    <span className="font-semibold">AI-Powered</span>
-                                </div>
-                                <div className="flex items-center gap-2 sm:gap-2.5">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 shadow-lg shadow-pink-500/50" />
-                                    <span className="font-semibold">Secure & Private</span>
-                                </div>
-                            </motion.div>
-                        </div>
-
-                        {/* Right Side - macOS Style Dashboard Mockup with Animations */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.6, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                            className="relative hidden lg:block"
-                        >
-                            {/* Floating mockup card with animation */}
-                            <motion.div
-                                className="relative"
-                                animate={{
-                                    y: [0, -10, 0],
-                                }}
-                                transition={{
-                                    duration: 6,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
-                            >
-                                {/* Animated Glow effect */}
-                                <motion.div
-                                    className="absolute -inset-4 bg-gradient-to-br from-violet-500/20 via-fuchsia-500/20 to-pink-500/20 blur-3xl rounded-3xl"
-                                    animate={{
-                                        scale: [1, 1.05, 1],
-                                        opacity: [0.5, 0.7, 0.5]
-                                    }}
-                                    transition={{
-                                        duration: 4,
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                    }}
-                                />
-
-                                {/* Main mockup container with hover effect */}
-                                <motion.div
-                                    className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0f] backdrop-blur-xl shadow-2xl"
-                                    whileHover={{
-                                        scale: 1.02,
-                                        rotateY: 5,
-                                        rotateX: -2,
-                                    }}
-                                    transition={{
-                                        type: "spring",
-                                        stiffness: 300,
-                                        damping: 20
-                                    }}
-                                    style={{
-                                        transformStyle: "preserve-3d",
-                                        perspective: 1000
-                                    }}
-                                >
-                                    {/* macOS window controls */}
-                                    <div className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5 bg-white/[0.02]">
-                                        <motion.div
-                                            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors cursor-pointer"
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        />
-                                        <motion.div
-                                            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-500 transition-colors cursor-pointer"
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        />
-                                        <motion.div
-                                            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500/80 hover:bg-green-500 transition-colors cursor-pointer"
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        />
-                                        <div className="ml-3 sm:ml-4 text-[10px] sm:text-xs text-white/40 font-semibold" style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}>
-                                            College Companion Dashboard
-                                        </div>
-                                    </div>
-
-                                    {/* Dashboard Screenshot with shimmer effect */}
-                                    <div className="relative overflow-hidden group">
-                                        <motion.img
-                                            src={dashboardPreview}
-                                            alt="Dashboard Preview"
-                                            className="w-full h-auto object-cover"
-                                            initial={{ opacity: 0.9 }}
-                                            whileHover={{ opacity: 1 }}
-                                            transition={{ duration: 0.3 }}
-                                        />
-                                        {/* Overlay gradient for extra depth */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/20 to-transparent pointer-events-none" />
-
-                                        {/* Shimmer effect on hover */}
-                                        <motion.div
-                                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                                            style={{
-                                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)'
-                                            }}
-                                            animate={{
-                                                x: ['-100%', '200%']
-                                            }}
-                                            transition={{
-                                                duration: 2,
-                                                repeat: Infinity,
-                                                repeatDelay: 3
-                                            }}
-                                        />
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block"
-            >
-                <motion.button
-                    onClick={scrollToFeatures}
-                    className="flex flex-col items-center gap-2 text-white/40 hover:text-white/60 transition-colors cursor-pointer"
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+            <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+                {/* Badge */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md"
                 >
-                    <span className="text-xs font-semibold tracking-wide" style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}>Scroll to explore</span>
-                    <ChevronDown className="w-5 h-5" strokeWidth={2} />
-                </motion.button>
-            </motion.div>
+                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                    <span className="text-[10px] sm:text-xs font-black text-white/70 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <Sparkles className="w-3 h-3 text-blue-400" />
+                        Next-Gen Academic Assistant
+                    </span>
+                </motion.div>
+
+                {/* Heading */}
+                <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-5xl md:text-8xl font-black text-white font-outfit tracking-tight leading-[1.05] mb-8"
+                >
+                    Master Your Studies <br />
+                    <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                        With AI Intelligence
+                    </span>
+                </motion.h1>
+
+                {/* Description */}
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed mb-12"
+                >
+                    The ultimate all-in-one platform for students. Automate attendance,
+                    generate exam questions, and collaborate in real-time.
+                </motion.p>
+
+                {/* CTAs */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-24"
+                >
+                    <button
+                        onClick={() => navigate('/register')}
+                        className="group relative px-8 py-4 rounded-2xl bg-white text-black font-bold flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)] overflow-hidden"
+                    >
+                        Launch Your Dashboard
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    <button
+                        onClick={() => {
+                            document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all active:scale-95"
+                    >
+                        See how it works
+                    </button>
+                </motion.div>
+
+                {/* Hero Dashboard Mockup Area */}
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 1 }}
+                    className="relative max-w-5xl mx-auto"
+                >
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-[80%] h-20 bg-blue-500/20 blur-[60px] rounded-full" />
+
+                    {/* Floating Status Badge */}
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-20 px-4 py-1.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/10 flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                            </span>
+                            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Scanning Academic Data:</span>
+                        </div>
+                        <span className="text-[10px] font-black text-blue-400">24 sources analyzed</span>
+                    </div>
+
+                    <div className="relative glass-card-premium rounded-[2.5rem] border-white/10 overflow-hidden shadow-2xl p-1 bg-white/[0.02]">
+                        <div className="relative bg-black/40 rounded-[2.2rem] overflow-hidden border border-white/5 aspect-[16/9] flex items-center justify-center group overflow-hidden">
+                            {/* Scanning Laser Effect */}
+                            <motion.div
+                                initial={{ top: "-10%" }}
+                                animate={{ top: "110%" }}
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    ease: "linear"
+                                }}
+                                className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent z-10 opacity-50 shadow-[0_0_15px_rgba(59,130,246,1)] pointer-events-none"
+                            />
+
+                            <img
+                                src={dashboardPreview}
+                                alt="College Companion Dashboard"
+                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Decorative side cards */}
+                    <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute hidden lg:block -left-12 bottom-1/4 p-6 glass-card text-left space-y-3 w-64 border-white/10 backdrop-blur-2xl"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <Zap className="w-5 h-5 text-blue-400" />
+                        </div>
+                        <h4 className="font-bold text-white text-sm">Attendance Sync</h4>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full w-3/4 bg-blue-500 rounded-full" />
+                        </div>
+                        <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">88% Accuracy</p>
+                    </motion.div>
+
+                    <motion.div
+                        animate={{ y: [0, 10, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        className="absolute hidden lg:block -right-12 top-1/4 p-6 glass-card text-left space-y-3 w-64 border-white/10 backdrop-blur-2xl"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <BookOpen className="w-5 h-5 text-purple-400" />
+                        </div>
+                        <h4 className="font-bold text-white text-sm">Smart Questions</h4>
+                        <div className="flex -space-x-2">
+                            {[1, 2, 3].map(i => (
+                                <div key={i} className="w-6 h-6 rounded-full border-2 border-black bg-gradient-to-br from-indigo-500 to-purple-500" />
+                            ))}
+                            <div className="w-6 h-6 rounded-full border-2 border-black bg-white/5 flex items-center justify-center text-[8px] font-bold text-white/40">+12</div>
+                        </div>
+                        <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">New Mock Test Ready</p>
+                    </motion.div>
+                </motion.div>
+            </div>
         </section>
     );
 };

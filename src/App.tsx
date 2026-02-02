@@ -15,6 +15,7 @@ import ProgressDashboard from "./pages/ProgressDashboard";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
+import Pricing from "./pages/Pricing.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Routes>
               {/* Landing Page */}
               <Route path="/" element={<Landing />} />
+              <Route path="/pricing" element={<Pricing />} />
 
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
