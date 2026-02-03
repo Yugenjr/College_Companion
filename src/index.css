@@ -19,18 +19,18 @@ body {
   :root {
     --radius: 0.5rem;
   }
-  
+
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
-  
+
   html {
     background: #050505 !important;
     color-scheme: dark;
   }
-  
+
   body {
     @apply text-white font-body antialiased;
     background: #050505 !important;
@@ -39,7 +39,7 @@ body {
     overflow-x: hidden;
     color-scheme: dark;
   }
-  
+
   #root {
     background: #050505 !important;
     min-height: 100vh;
@@ -47,28 +47,29 @@ body {
 }
 
 @layer components {
+
   /* Neon Text */
   .neon-text {
     @apply text-transparent bg-clip-text bg-primary-gradient;
     text-shadow: 0 0 20px rgba(157, 78, 221, 0.6), 0 0 30px rgba(76, 201, 240, 0.4);
   }
-  
+
   /* Neon Border */
   .neon-border {
     @apply border border-neonPurple;
     box-shadow: 0 0 15px rgba(157, 78, 221, 0.5), inset 0 0 15px rgba(157, 78, 221, 0.2);
   }
-  
+
   .neon-border-blue {
     @apply border border-neonBlue;
     box-shadow: 0 0 15px rgba(76, 201, 240, 0.5), inset 0 0 15px rgba(76, 201, 240, 0.2);
   }
-  
+
   .neon-border-pink {
     @apply border border-neonPink;
     box-shadow: 0 0 15px rgba(255, 94, 205, 0.5), inset 0 0 15px rgba(255, 94, 205, 0.2);
   }
-  
+
   /* Neon Card */
   .neon-card {
     background: rgba(13, 13, 13, 0.7);
@@ -77,13 +78,13 @@ body {
     box-shadow: 0 0 20px rgba(157, 78, 221, 0.15), 0 8px 32px 0 rgba(31, 38, 135, 0.2);
     transition: all 0.3s ease;
   }
-  
+
   .neon-card:hover {
     @apply border-neonPurple/50;
     box-shadow: 0 0 25px rgba(157, 78, 221, 0.3), 0 8px 32px 0 rgba(31, 38, 135, 0.3);
     transform: translateY(-2px);
   }
-  
+
   /* Glass Card */
   .glass-card {
     background: rgba(0, 0, 0, 0.5);
@@ -91,20 +92,20 @@ body {
     @apply rounded-neon-lg p-6 border border-white/10;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
-  
+
   /* Neon Button */
   .neon-button {
     @apply px-6 py-3 rounded-neon font-semibold text-white bg-primary-gradient;
     @apply transition-all duration-300 hover:scale-105 hover:shadow-neon-glow;
     @apply active:scale-95;
   }
-  
+
   .neon-button-outline {
     @apply px-6 py-3 rounded-neon font-semibold text-white bg-transparent border-2 border-neonPurple;
     @apply transition-all duration-300 hover:bg-neonPurple/20 hover:shadow-neon-purple;
     @apply active:scale-95;
   }
-  
+
   /* Neon Input */
   .neon-input {
     @apply w-full px-4 py-3 border border-glassBorder rounded-neon;
@@ -113,44 +114,45 @@ body {
     @apply focus:outline-none focus:border-neonPurple focus:shadow-neon-purple;
     @apply transition-all duration-300;
   }
-  
+
   .neon-input:focus {
     background: rgba(13, 13, 13, 0.7);
   }
-  
+
   /* Glow Effects */
   .glow-purple {
     text-shadow: 0 0 10px rgba(157, 78, 221, 0.8), 0 0 20px rgba(157, 78, 221, 0.5);
   }
-  
+
   .glow-blue {
     text-shadow: 0 0 10px rgba(76, 201, 240, 0.8), 0 0 20px rgba(76, 201, 240, 0.5);
   }
-  
+
   .glow-pink {
     text-shadow: 0 0 10px rgba(255, 94, 205, 0.8), 0 0 20px rgba(255, 94, 205, 0.5);
   }
 }
 
 @layer utilities {
+
   /* Scrollbar Styles */
   .scrollbar-neon::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   .scrollbar-neon::-webkit-scrollbar-track {
     background: #0d0d0d;
   }
-  
+
   .scrollbar-neon::-webkit-scrollbar-thumb {
     @apply bg-neonPurple/50 rounded-full;
   }
-  
+
   .scrollbar-neon::-webkit-scrollbar-thumb:hover {
     @apply bg-neonPurple;
   }
-  
+
   /* Transitions */
   .transition-neon {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -186,4 +188,36 @@ body {
 :focus-visible {
   outline: 2px solid #9d4edd;
   outline-offset: 2px;
+}
+
+/* Light Mode Styles - Override dark mode */
+html.light,
+html.light body,
+html.light #root {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  color-scheme: light !important;
+}
+
+/* Light mode for main container */
+html.light .min-h-screen {
+  background: #f8f9fa !important;
+}
+
+/* Light mode text colors */
+html.light * {
+  color: #1a1a1a !important;
+}
+
+/* Light mode for specific dark backgrounds */
+html.light .bg-\[\#0a0a0f\],
+html.light .bg-\[\#050505\] {
+  background: #f8f9fa !important;
+}
+
+/* Make sure headings are visible in light mode */
+html.light h1,
+html.light h2,
+html.light h3 {
+  color: #1a1a1a !important;
 }
