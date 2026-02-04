@@ -1,166 +1,107 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { Sparkles, UserPlus, Settings, Rocket } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { motion } from 'framer-motion';
+import { UserPlus, CloudUpload, Zap, GraduationCap } from 'lucide-react';
 
 const HowItWorksSection = () => {
-    const howItWorksRef = useRef(null);
-    const isHowItWorksInView = useInView(howItWorksRef, { once: true, margin: '-100px' });
-
-    const navigate = useNavigate();
-    const { user } = useAuth();
-
-    const handleStepNavigation = (stepTitle) => {
-        if (stepTitle === 'Sign Up') {
-            navigate('/register');
-            return;
-        }
-
-        if (!user) {
-            navigate('/login');
-            return;
-        }
-
-        switch (stepTitle) {
-            case 'Setup Profile':
-                navigate('/profile');
-                break;
-            case 'Start Learning':
-                navigate('/dashboard');
-                break;
-            default:
-                navigate('/dashboard');
-        }
-    };
-
     const steps = [
         {
+            num: "01",
+            title: "Join the Squad",
+            desc: "Create your account in seconds with Google or email. No fancy setup required.",
             icon: UserPlus,
-            number: '01',
-            title: 'Sign Up',
-            description: 'Quick registration with Google or email via Firebase Authentication.',
+            color: "from-blue-500 to-indigo-500"
         },
         {
-            icon: Settings,
-            number: '02',
-            title: 'Setup Profile',
-            description: 'Complete onboarding with your semester details and academic info.',
+            num: "02",
+            title: "Sync Your Data",
+            desc: "Upload your syllabus or current attendance status. Our AI starts analyzing immediately.",
+            icon: CloudUpload,
+            color: "from-purple-500 to-pink-500"
         },
         {
-            icon: Rocket,
-            number: '03',
-            title: 'Start Learning',
-            description: 'Access AI tools, study rooms, and track your academic progress.',
+            num: "03",
+            title: "Generate Success",
+            desc: "Get AI-generated questions, summaries, and personalized study schedules.",
+            icon: Zap,
+            color: "from-orange-500 to-red-500"
         },
+        {
+            num: "04",
+            title: "Crush Your Exams",
+            desc: "Stay ahead with real-time tracking and collaborative study sessions.",
+            icon: GraduationCap,
+            color: "from-teal-500 to-green-500"
+        }
     ];
 
     return (
-        <section id="how-it-works" ref={howItWorksRef} className="relative py-32 border-t border-white/[0.06]">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/[0.02] to-transparent" />
-
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isHowItWorksInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-center mb-24"
-                >
-                    <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl mb-8">
-                        <Sparkles className="w-4 h-4 text-blue-400" strokeWidth={2.5} />
-                        <span
-                            className="text-sm text-white/60 font-bold tracking-tight"
-                            style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                        >
-                            How It Works
-                        </span>
-                    </div>
-                    <h2
-                        className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-[-0.02em]"
-                        style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
+        <section id="how-it-works" className="relative py-32 bg-dark-deep overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="grid lg:grid-cols-2 gap-20 items-center">
+                    {/* Left Side: Illustration / UI */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="relative"
                     >
-                        <span className="text-white">Get Started in</span>
-                        <br />
-                        <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                            Three Simple Steps
-                        </span>
-                    </h2>
-                    <p
-                        className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto leading-relaxed"
-                        style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                    >
-                        Begin your journey to academic excellence in minutes
-                    </p>
-                </motion.div>
-
-                <div className="relative max-w-6xl mx-auto">
-                    <div className="hidden lg:block absolute top-24 left-0 right-0 h-[2px]">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                        {steps.map((step, index) => (
-                            <motion.div
-                                key={index}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => handleStepNavigation(step.title)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleStepNavigation(step.title)}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={isHowItWorksInView ? { opacity: 1, y: 0 } : {}}
-                                transition={{ duration: 0.6, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                className="relative group pt-8 cursor-pointer focus:outline-none"
-                            >
-                                <div
-                                    className="
-                                        relative p-10 rounded-3xl
-                                        bg-white/[0.02] border border-white/[0.06]
-                                        backdrop-blur-xl
-                                        transition-all duration-300
-                                        group-hover:bg-white/[0.04]
-                                        group-hover:border-white/[0.1]
-                                        group-hover:-translate-y-1
-                                        focus-visible:ring-2
-                                        focus-visible:ring-violet-500/60
-                                        focus-visible:ring-offset-0
-                                        overflow-visible
-                                    "
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500/[0.03] to-fuchsia-500/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                                    <div className="absolute -top-6 left-10">
-                                        <div className="relative">
-                                            <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 blur-xl opacity-60" />
-                                            <div
-                                                className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center font-bold text-white shadow-2xl"
-                                                style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                                            >
-                                                {step.number}
+                        <div className="absolute -inset-10 bg-indigo-500/20 blur-[100px] rounded-full" />
+                        <div className="relative glass-card-premium p-4 md:p-8 rounded-[3rem] border-white/10 shadow-2xl">
+                            <div className="bg-black/40 rounded-[2rem] p-6 md:p-10 border border-white/5 space-y-8">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-xl font-bold text-white font-outfit">AI Integration</h4>
+                                    <div className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-[10px] font-bold uppercase">Processing...</div>
+                                </div>
+                                <div className="space-y-4">
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className="flex gap-4">
+                                            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex-shrink-0" />
+                                            <div className="flex-1 space-y-2">
+                                                <div className="h-2 w-3/4 bg-white/10 rounded-full" />
+                                                <div className="h-2 w-1/2 bg-white/5 rounded-full" />
                                             </div>
                                         </div>
+                                    ))}
+                                </div>
+                                <div className="pt-8 border-t border-white/5">
+                                    <div className="h-12 w-full btn-premium-primary rounded-xl flex items-center justify-center font-bold text-white">
+                                        Analyze Academic Data
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
 
-                                    <div className="mt-6 mb-8">
-                                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:border-white/20 transition-all duration-500">
-                                            <step.icon className="w-8 h-8 text-white/80" strokeWidth={2} />
+                    {/* Right Side: Steps */}
+                    <div className="space-y-12">
+                        <div className="space-y-4">
+                            <h2 className="text-4xl md:text-5xl font-bold text-white font-outfit">Study Smarter In Four <br /> Simple Steps</h2>
+                            <p className="text-white/40 max-w-md">We've automated the boring parts of college so you can focus on what actually matters.</p>
+                        </div>
+
+                        <div className="space-y-8">
+                            {steps.map((step, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                                    className="flex gap-6 group"
+                                >
+                                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${step.color} p-[1px] flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                                        <div className="w-full h-full rounded-2xl bg-dark-deep flex items-center justify-center">
+                                            <step.icon className="w-6 h-6 text-white" />
                                         </div>
                                     </div>
-
-                                    <h3
-                                        className="text-2xl font-bold mb-4 text-white"
-                                        style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                                    >
-                                        {step.title}
-                                    </h3>
-                                    <p
-                                        className="text-white/40 leading-relaxed"
-                                        style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
-                                    >
-                                        {step.description}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xs font-black text-indigo-400 opacity-50">{step.num}</span>
+                                            <h4 className="text-xl font-bold text-white font-outfit">{step.title}</h4>
+                                        </div>
+                                        <p className="text-white/40 text-sm leading-relaxed max-w-sm">{step.desc}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

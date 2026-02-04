@@ -54,7 +54,7 @@ body {
     text-shadow: 0 0 20px rgba(157, 78, 221, 0.6), 0 0 30px rgba(76, 201, 240, 0.4);
   }
 
-  /* Neon Border */
+  /* Neon Borders */
   .neon-border {
     @apply border border-neonPurple;
     box-shadow: 0 0 15px rgba(157, 78, 221, 0.5), inset 0 0 15px rgba(157, 78, 221, 0.2);
@@ -75,13 +75,12 @@ body {
     background: rgba(13, 13, 13, 0.7);
     backdrop-filter: blur(12px);
     @apply rounded-neon p-6 border border-glassBorder;
-    box-shadow: 0 0 20px rgba(157, 78, 221, 0.15), 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.15), 0 8px 32px rgba(31, 38, 135, 0.2);
     transition: all 0.3s ease;
   }
 
   .neon-card:hover {
-    @apply border-neonPurple/50;
-    box-shadow: 0 0 25px rgba(157, 78, 221, 0.3), 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+    box-shadow: 0 0 25px rgba(157, 78, 221, 0.3);
     transform: translateY(-2px);
   }
 
@@ -90,33 +89,6 @@ body {
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(12px);
     @apply rounded-neon-lg p-6 border border-white/10;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  }
-
-  /* Neon Button */
-  .neon-button {
-    @apply px-6 py-3 rounded-neon font-semibold text-white bg-primary-gradient;
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-neon-glow;
-    @apply active:scale-95;
-  }
-
-  .neon-button-outline {
-    @apply px-6 py-3 rounded-neon font-semibold text-white bg-transparent border-2 border-neonPurple;
-    @apply transition-all duration-300 hover:bg-neonPurple/20 hover:shadow-neon-purple;
-    @apply active:scale-95;
-  }
-
-  /* Neon Input */
-  .neon-input {
-    @apply w-full px-4 py-3 border border-glassBorder rounded-neon;
-    background: rgba(13, 13, 13, 0.5);
-    @apply text-white placeholder:text-white/40;
-    @apply focus:outline-none focus:border-neonPurple focus:shadow-neon-purple;
-    @apply transition-all duration-300;
-  }
-
-  .neon-input:focus {
-    background: rgba(13, 13, 13, 0.7);
   }
 
   /* Glow Effects */
@@ -131,93 +103,57 @@ body {
   .glow-pink {
     text-shadow: 0 0 10px rgba(255, 94, 205, 0.8), 0 0 20px rgba(255, 94, 205, 0.5);
   }
+
+  /* Premium Theme */
+  .bg-dark-deep {
+    background: radial-gradient(circle at top center, #1b1b3a 0%, #050505 100%);
+  }
+
+  .glass-card-premium {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .btn-premium-primary {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    box-shadow: 0 0 30px rgba(59,130,246,0.4);
+  }
+
+  /* Blob Animation */
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  @keyframes blob {
+    0% { transform: translate(0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0) scale(1); }
+  }
 }
 
 @layer utilities {
 
-  /* Scrollbar Styles */
-  .scrollbar-neon::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  .bg-grid-white {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='white' stroke-opacity='0.03'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
   }
 
-  .scrollbar-neon::-webkit-scrollbar-track {
-    background: #0d0d0d;
+  .scrollbar-neon::-webkit-scrollbar {
+    width: 8px;
   }
 
   .scrollbar-neon::-webkit-scrollbar-thumb {
-    @apply bg-neonPurple/50 rounded-full;
-  }
-
-  .scrollbar-neon::-webkit-scrollbar-thumb:hover {
-    @apply bg-neonPurple;
-  }
-
-  /* Transitions */
-  .transition-neon {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #9d4edd;
+    border-radius: 999px;
   }
 }
 
-/* Global Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #050505;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #9d4edd, #4cc9f0);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #b569f5, #6dd5f6);
-}
-
-/* Selection */
-::selection {
-  background: rgba(157, 78, 221, 0.3);
-  color: white;
-}
-
-/* Focus Styles */
-:focus-visible {
-  outline: 2px solid #9d4edd;
-  outline-offset: 2px;
-}
-
-/* Light Mode Styles - Override dark mode */
+/* Light Mode */
 html.light,
 html.light body,
 html.light #root {
   background: #ffffff !important;
   color: #1a1a1a !important;
-  color-scheme: light !important;
-}
-
-/* Light mode for main container */
-html.light .min-h-screen {
-  background: #f8f9fa !important;
-}
-
-/* Light mode text colors */
-html.light * {
-  color: #1a1a1a !important;
-}
-
-/* Light mode for specific dark backgrounds */
-html.light .bg-\[\#0a0a0f\],
-html.light .bg-\[\#050505\] {
-  background: #f8f9fa !important;
-}
-
-/* Make sure headings are visible in light mode */
-html.light h1,
-html.light h2,
-html.light h3 {
-  color: #1a1a1a !important;
+  color-scheme: light;
 }
