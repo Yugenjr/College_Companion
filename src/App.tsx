@@ -16,6 +16,8 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
 import Pricing from "./pages/Pricing.jsx";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsConditions from "./pages/Legal/TermsConditions";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
 
               {/* Onboarding - Protected */}
               <Route path="/onboarding" element={
