@@ -55,17 +55,25 @@ const LandingFooter = () => {
                     </div>
 
                     <div className="lg:col-span-3 space-y-4">
-                        <h4 className="text-sm font-bold text-white uppercase tracking-widest text-glow-blue">Legal</h4>
-                        <ul className="space-y-3">
-                            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(item => (
-                                <li key={item}>
-                                    <a href="#" className="text-sm text-white/40 hover:text-white transition-colors font-medium">
-                                        {item}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+    <h4 className="text-sm font-bold text-white uppercase tracking-widest text-glow-blue">Legal</h4>
+    <ul className="space-y-3">
+        {[
+            { name: 'Privacy Policy', path: '/privacy-policy' },
+            { name: 'Terms of Service', path: '/terms-of-service' },
+            { name: 'Cookie Policy', path: '/cookie-policy' }
+        ].map(item => (
+            <li key={item.name}>
+                <Link
+                    to={item.path}
+                    className="text-sm text-white/40 hover:text-white transition-colors font-medium"
+                >
+                    {item.name}
+                </Link>
+            </li>
+        ))}
+    </ul>
+</div>
+
                 </div>
 
                 {/* Bottom Bar */}
