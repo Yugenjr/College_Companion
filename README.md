@@ -29,6 +29,56 @@ College Companion is a comprehensive full-stack MERN application designed to hel
 
 ---
 
+## System Architecture
+
+College Companion uses a distributed architecture to manage high-compute AI tasks and real-time interactions efficiently.
+
+### High-Level Data Flow
+This map illustrates how the Frontend orchestrates requests across our two Node.js backends and various AI SDKs.
+
+```mermaid
+graph TD
+    User((Student)) --> FE[Vite + React 19]
+    
+    subgraph "Frontend Layer"
+    FE --> Auth[Firebase Google Sign-In]
+    FE --> Socket[Socket.io Client]
+    end
+
+    FE -->|API Port 5000| BE1[Main Backend]
+    FE -->|API Port 5001| BE2[Question Gen Backend]
+
+    subgraph "AI Orchestration"
+    BE1 -->|Attendance/OCR| Gemini[Google Gemini]
+    BE1 -->|Syllabus| Perplexity[Perplexity AI]
+    BE2 -->|Q&A Generation| Groq[Groq AI]
+    end
+
+    BE1 --> DB[(MongoDB Atlas)]
+    BE2 --> DB
+```
+
+### Question Generation Logic
+To handle exam-grade question generation, the system follows this specific sequence to ensure context retention:
+
+```mermaid
+sequenceDiagram
+    participant U as Student
+    participant F as Frontend (Port 5173)
+    participant B as Gen-Backend (Port 5001)
+    participant G as Groq AI (Llama-3)
+
+    U->>F: Upload Syllabus/Topic
+    F->>B: POST /api/questions/generate
+    B->>G: Send Contextual Prompt
+    G-->>B: Return Structured JSON
+    B->>B: Sanitize & Format
+    B-->>F: Return Question Set
+    F->>U: Display Practice UI
+```
+
+---
+
 ## 🚀 Features
 
 ### 🔐 Authentication & Security
@@ -84,6 +134,13 @@ College Companion is a comprehensive full-stack MERN application designed to hel
 - **AI/ML:** Groq SDK, Google Gemini, Perplexity AI
 - **OCR:** Tesseract.js
 
+</td>
+</tr>
+
+<tr>
+<td colspan="2" align="center">
+
+**Architecture & Documentation:** Mermaid.js (System Mapping), Distributed Dual-Backend (Port 5000/5001)
 </td>
 </tr>
 </table>
