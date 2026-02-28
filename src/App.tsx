@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { RoomProvider } from "./contexts/RoomContext";
@@ -20,6 +20,7 @@ import PrivacyPolicy from "./pages/Legal/PrivacyPolicy.jsx";
 import TermsOfService from "./pages/Legal/TermsOfService.jsx";
 import CookiePolicy from "./pages/Legal/CookiePolicy.jsx";
 import Documentation from "./pages/Docs/Documentation.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   return (
@@ -62,8 +63,8 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
               </Route>
 
-              {/* Catch all - redirect to login */}
-              <Route path="*" element={<Navigate to="/login" replace />} />
+              {/* Catch all - Show 404 Page */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </RoomProvider>
         </AuthProvider>
