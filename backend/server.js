@@ -16,6 +16,7 @@ import survivalRoutes from './routes/survivalRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
 import questionsRoutes from './routes/questionsRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
+import auctionRoutes from './routes/auction.js';
 
 // Import legacy routes (kept for backwards compatibility)
 import apiRoutes from './routes/apiRoutes.js';
@@ -136,6 +137,7 @@ app.use('/api/notes', notesRoutes);
 app.use('/api/questions', questionsRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/study-room-chat', studyRoomChatRoutes);
+app.use('/api/auction', auctionRoutes);
 
 // Legacy routes (kept for backwards compatibility)
 app.use('/api', apiRoutes);
