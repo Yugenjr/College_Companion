@@ -86,6 +86,10 @@ try {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Rate limiting middleware
+import { apiRateLimiter } from './middleware/rateLimiter.js';
+app.use(apiRateLimiter);
+
 // CORS Configuration - Allow all localhost origins for development
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
