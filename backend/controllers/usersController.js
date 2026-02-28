@@ -23,7 +23,6 @@ export const createUser = async (req, res) => {
 
     if (existingUser) {
       return res.json({
-        success: true,
         message: 'User already exists',
         user: existingUser
       });
@@ -36,6 +35,7 @@ export const createUser = async (req, res) => {
       email: email || undefined, // undefined tells Mongo to ignore (sparse index friendly)
       profile: {
         name: name || '',
+        try {
         email: email // Keep for backward compatibility
       }
     });
