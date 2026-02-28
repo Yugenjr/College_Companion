@@ -16,6 +16,10 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
 import Pricing from "./pages/Pricing.jsx";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy.jsx";
+import TermsOfService from "./pages/Legal/TermsOfService.jsx";
+import CookiePolicy from "./pages/Legal/CookiePolicy.jsx";
+import Documentation from "./pages/Docs/Documentation.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
@@ -28,6 +32,10 @@ function App() {
               {/* Landing Page */}
               <Route path="/" element={<Landing />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/cookies" element={<CookiePolicy />} />
+              <Route path="/docs" element={<Documentation />} />
 
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />

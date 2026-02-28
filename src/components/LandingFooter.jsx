@@ -44,11 +44,15 @@ const LandingFooter = () => {
                     <div className="lg:col-span-2 space-y-4">
                         <h4 className="text-sm font-bold text-white uppercase tracking-widest text-glow-blue">Resources</h4>
                         <ul className="space-y-3">
-                            {['Documentation', 'API Reference', 'Support'].map(item => (
-                                <li key={item}>
-                                    <a href="#" className="text-sm text-white/40 hover:text-white transition-colors font-medium">
-                                        {item}
-                                    </a>
+                            {[
+                                { name: 'Documentation', href: '/docs' },
+                                { name: 'API Reference', href: '/docs' },
+                                { name: 'Support', href: '/docs' },
+                            ].map(item => (
+                                <li key={item.name}>
+                                    <Link to={item.href} className="text-sm text-white/40 hover:text-white transition-colors font-medium">
+                                        {item.name}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -57,11 +61,15 @@ const LandingFooter = () => {
                     <div className="lg:col-span-3 space-y-4">
                         <h4 className="text-sm font-bold text-white uppercase tracking-widest text-glow-blue">Legal</h4>
                         <ul className="space-y-3">
-                            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(item => (
-                                <li key={item}>
-                                    <a href="#" className="text-sm text-white/40 hover:text-white transition-colors font-medium">
-                                        {item}
-                                    </a>
+                            {[
+                                { name: 'Privacy Policy', href: '/privacy' },
+                                { name: 'Terms of Service', href: '/terms' },
+                                { name: 'Cookie Policy', href: '/cookies' },
+                            ].map(item => (
+                                <li key={item.name}>
+                                    <Link to={item.href} className="text-sm text-white/40 hover:text-white transition-colors font-medium">
+                                        {item.name}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
