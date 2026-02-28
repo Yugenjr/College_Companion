@@ -99,7 +99,7 @@ const HeroSection = () => {
                     </div>
 
                     <div className="relative glass-card-premium rounded-[2.5rem] border-white/10 overflow-hidden shadow-2xl p-1 bg-white/[0.02]">
-                        <div className="relative bg-black/40 rounded-[2.2rem] overflow-hidden border border-white/5 aspect-[16/9] flex items-center justify-center group overflow-hidden">
+                        <div className="relative bg-black/40 rounded-[2.2rem] overflow-hidden border border-white/5 aspect-[16/9] flex items-center justify-center group">
                             {/* Scanning Laser Effect */}
                             <motion.div
                                 initial={{ top: "-10%" }}

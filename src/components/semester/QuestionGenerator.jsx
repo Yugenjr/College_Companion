@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, FileText, Copy, Check, Save, AlertCircle } from "lucide-react";
+import { FileText, Copy, Check, Save, AlertCircle, Sparkles } from "lucide-react";
+import logo from "../../assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
 import API from "@/services/api";
 import { addActivity, ACTIVITY_TYPES } from "@/services/progressService";
@@ -44,10 +45,10 @@ export default function QuestionGenerator() {
         questionType,
         userId: currentUser.uid,
       });
-      
+
       if (data.success && data.questions) {
         // Extract question text from objects
-        const questionTexts = data.questions.map(q => 
+        const questionTexts = data.questions.map(q =>
           typeof q === 'string' ? q : q.question || JSON.stringify(q)
         );
         setQuestions(questionTexts);
@@ -94,7 +95,7 @@ export default function QuestionGenerator() {
         tags: [questionType, 'generated-questions'],
         type: 'question-generator',
       });
-      
+
       if (data.success) {
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
@@ -161,9 +162,11 @@ export default function QuestionGenerator() {
         className="neon-card p-6"
       >
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-            <Sparkles className="w-6 h-6 text-white" />
-          </div>
+          <img
+            src={logo}
+            alt="College Companion"
+            className="w-10 h-10 object-contain drop-shadow-[0_2px_8px_rgba(59,130,246,0.5)]"
+          />
           <div>
             <h2 className="text-xl font-semibold text-white glow-blue">Question Generator</h2>
             <p className="text-sm text-white/70">Powered by Groq AI</p>
@@ -287,7 +290,7 @@ export default function QuestionGenerator() {
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4 border-t border-[#E5E7EB] dark:border-[#2A2F35]">
-            <button 
+            <button
               onClick={handleSaveAsNotes}
               disabled={isSaving}
               className="px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 dark:disabled:from-gray-700 dark:disabled:to-gray-800 rounded-xl text-white text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
@@ -304,7 +307,7 @@ export default function QuestionGenerator() {
                 </>
               )}
             </button>
-            <button 
+            <button
               className="px-6 py-3 bg-[#F8F9FB] dark:bg-[#0D1117] hover:bg-[#E5E7EB] dark:hover:bg-[#111418] rounded-xl text-[#0A0A0A] dark:text-[#FFFFFF] text-sm font-semibold transition-all duration-200 border border-[#E5E7EB] dark:border-[#2A2F35]"
             >
               Export as PDF
@@ -316,7 +319,11 @@ export default function QuestionGenerator() {
       {/* Empty State */}
       {questions.length === 0 && !isGenerating && (
         <div className="bg-white dark:bg-[#111418] rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-none p-12 text-center border border-[#E5E7EB] dark:border-[#2A2F35] transition-all duration-300">
-          <Sparkles className="w-16 h-16 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
+          <img
+            src={logo}
+            alt="College Companion"
+            className="w-16 h-16 object-contain mx-auto mb-4 opacity-50"
+          />
           <p className="text-[#1A1A1A] dark:text-[#E4E4E4] text-base mb-2 font-medium">
             Ready to generate questions
           </p>
