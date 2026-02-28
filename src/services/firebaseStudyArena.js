@@ -269,6 +269,10 @@ export const listenForUsers = (roomId, callback) => {
  */
 export const updateTypingStatus = async (roomId, userId, isTyping) => {
   try {
+    // Update new schema: isTyping in user document
+    const userRef = ref(db, `rooms/${roomId}/users/${userId}`);
+    await update(userRef, { isTyping });
+    // Backward compatibility: also update old typing node
     const typingRef = ref(db, `rooms/${roomId}/typing/${userId}`);
     await set(typingRef, isTyping);
   } catch (error) {
@@ -284,18 +288,17 @@ export const updateTypingStatus = async (roomId, userId, isTyping) => {
  * @returns {Function} Cleanup function to unsubscribe
  */
 export const listenForTyping = (roomId, callback) => {
-  const typingRef = ref(db, `rooms/${roomId}/typing`);
-  
+  // Listen for typing status in new schema (user documents)
+  const usersRef = ref(db, `rooms/${roomId}/users`);
   const unsubscribe = onValue(
-    typingRef,
+    usersRef,
     (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // Filter out false values (not typing)
+        // Find users with isTyping true
         const typingUsers = Object.entries(data)
-          .filter(([_, isTyping]) => isTyping)
+          .filter(([_, user]) => user.isTyping)
           .map(([userId]) => userId);
-        
         callback(typingUsers);
       } else {
         callback([]);
@@ -306,9 +309,25 @@ export const listenForTyping = (roomId, callback) => {
       callback([]);
     }
   );
-
+  // Backward compatibility: also listen to old typing node
+  const typingRef = ref(db, `rooms/${roomId}/typing`);
+  const unsubscribeOld = onValue(
+    typingRef,
+    (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const typingUsers = Object.entries(data)
+          .filter(([_, isTyping]) => isTyping)
+          .map(([userId]) => userId);
+        callback(typingUsers);
+      }
+    }
+  );
   // Return cleanup function
-  return () => off(typingRef, "value", unsubscribe);
+  return () => {
+    off(usersRef, "value", unsubscribe);
+    off(typingRef, "value", unsubscribeOld);
+  };
 };
 
 /**
