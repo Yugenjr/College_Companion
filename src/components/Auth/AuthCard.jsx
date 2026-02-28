@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Sparkles, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import logo from "../../assets/logo.png";
 
 /**
  * Reusable Auth Card wrapper component
@@ -62,9 +63,13 @@ const AuthCard = ({ children, title, subtitle, backLink = "/" }) => {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                            className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/20"
+                            className="w-20 h-20 mx-auto mb-6 flex items-center justify-center"
                         >
-                            <Sparkles className="w-8 h-8 text-white" />
+                            <img
+                                src={logo}
+                                alt="College Companion Logo"
+                                className="w-20 h-20 object-contain drop-shadow-[0_4px_16px_rgba(124,58,237,0.5)]"
+                            />
                         </motion.div>
 
                         <h1 className="text-3xl font-bold text-white mb-2 tracking-tight" style={{ fontFamily: '"SF Pro Display", sans-serif' }}>
