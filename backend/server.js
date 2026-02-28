@@ -24,6 +24,10 @@ import aiAttendanceRoutes from './routes/aiAttendance.js';
 // Import study room chat routes
 import studyRoomChatRoutes from './routes/studyRoomChatRoutes.js';
 
+// Import authentication and protected routes
+import authRoutes from './routes/auth.js';
+import protectedRoutes from './routes/protected.js';
+
 // Load environment variables
 dotenv.config();
 
@@ -136,6 +140,10 @@ app.use('/api/study-room-chat', studyRoomChatRoutes);
 // Legacy routes (kept for backwards compatibility)
 app.use('/api', apiRoutes);
 app.use('/api/ai-attendance', aiAttendanceRoutes);
+
+// Authentication and protected routes
+app.use('/api/auth', authRoutes);
+app.use('/api', protectedRoutes);
 
 // Catch-all Handler
 app.use((req, res) => {

@@ -97,10 +97,28 @@ const userSchema = new mongoose.Schema({
       answer: { type: String, default: '' },
       createdAt: { type: Date, default: Date.now }
     }]
-  }
+  },
+
+  // Authentication fields
+  password: { type: String, required: false },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' }
 }, {
   timestamps: true
 });
+
+// Password hashing middleware
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password') || !this.password) return next();
+  const bcrypt = await import('bcryptjs');
+  this.password = await bcrypt.default.hash(this.password, 10);
+  next();
+});
+
+// Password comparison method
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  const bcrypt = await import('bcryptjs');
+  return bcrypt.default.compare(candidatePassword, this.password);
+};
 
 const User = mongoose.model('User', userSchema);
 
