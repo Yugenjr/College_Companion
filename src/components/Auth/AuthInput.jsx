@@ -24,13 +24,13 @@ const AuthInput = ({
 
     return (
         <div className="w-full space-y-2">
-            <label className="text-sm font-medium text-white/70 ml-1">
+            <label className="text-xs font-semibold text-white/50 ml-1">
                 {label}
             </label>
             <div className="relative group">
                 {/* Icon */}
                 {Icon && (
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-violet-400 transition-colors">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-blue-400 transition-colors">
                         <Icon className="w-5 h-5" />
                     </div>
                 )}
@@ -44,11 +44,11 @@ const AuthInput = ({
                     placeholder={placeholder}
                     disabled={disabled}
                     className={`
-                        w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5
-                        ${Icon ? "pl-12" : ""}
-                        ${isPassword ? "pr-12" : ""}
-                        text-white placeholder:text-white/20
-                        focus:outline-none focus:border-violet-500/50 focus:bg-white/10
+                        w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5
+                        ${Icon ? "pl-11" : ""}
+                        ${isPassword ? "pr-11" : ""}
+                        text-sm text-white placeholder:text-white/20
+                        focus:outline-none focus:border-blue-500/50 focus:bg-white/10
                         hover:border-white/20
                         transition-all duration-300
                         disabled:opacity-50 disabled:cursor-not-allowed

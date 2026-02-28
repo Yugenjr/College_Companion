@@ -145,7 +145,7 @@ export default function Register() {
 
   return (
     <AuthCard
-      title="Join EduCompanion"
+      title="Join College Companion"
       subtitle={isGoogleSignIn ? "Complete your profile" : "Create your account"}
     >
       {/* Error Banner */}
@@ -160,28 +160,32 @@ export default function Register() {
         </motion.div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <AuthInput
-          label="Full Name"
-          name="fullName"
-          placeholder="Enter your full name"
-          value={formData.fullName}
-          onChange={handleChange}
-          icon={User}
-          disabled={loading}
-        />
+      <form onSubmit={handleSubmit} className="space-y-2.5 lg:space-y-3">
+        {/* Row 1: Name & College */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
+          <AuthInput
+            label="Full Name"
+            name="fullName"
+            placeholder="Your name"
+            value={formData.fullName}
+            onChange={handleChange}
+            icon={User}
+            disabled={loading}
+          />
 
-        <AuthInput
-          label="College Name"
-          name="collegeName"
-          placeholder="Enter your college name"
-          value={formData.collegeName}
-          onChange={handleChange}
-          icon={GraduationCap}
-          disabled={loading}
-        />
+          <AuthInput
+            label="College"
+            name="collegeName"
+            placeholder="College name"
+            value={formData.collegeName}
+            onChange={handleChange}
+            icon={GraduationCap}
+            disabled={loading}
+          />
+        </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        {/* Row 2: Degree & Age */}
+        <div className="grid grid-cols-2 gap-3 lg:gap-4">
           <AuthInput
             label="Degree"
             name="degree"
@@ -205,77 +209,81 @@ export default function Register() {
           />
         </div>
 
+        {/* Row 3: Email (Full Width) */}
         <AuthInput
           label="Email Address"
           type="email"
           name="email"
-          placeholder="Enter your email"
+          placeholder="your.email@college.edu"
           value={formData.email}
           onChange={handleChange}
           icon={Mail}
           disabled={loading || isGoogleSignIn}
         />
 
+        {/* Row 4: Passwords */}
         {!isGoogleSignIn && (
-          <>
-            <div>
+          <div className="space-y-2 lg:space-y-2.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
+              <div>
+                <AuthInput
+                  label="Password"
+                  type="password"
+                  name="password"
+                  placeholder="Min 6 chars"
+                  value={formData.password}
+                  onChange={handleChange}
+                  icon={Lock}
+                  disabled={loading}
+                />
+              </div>
+
               <AuthInput
-                label="Create Password"
+                label="Confirm"
                 type="password"
-                name="password"
-                placeholder="At least 6 characters"
-                value={formData.password}
+                name="confirmPassword"
+                placeholder="Re-enter"
+                value={formData.confirmPassword}
                 onChange={handleChange}
                 icon={Lock}
                 disabled={loading}
               />
-              <PasswordStrength password={formData.password} />
             </div>
-
-            <AuthInput
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-enter your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              icon={Lock}
-              disabled={loading}
-            />
-          </>
+            <PasswordStrength password={formData.password} />
+          </div>
         )}
 
         {/* Terms and Conditions */}
-        <div className="flex items-start gap-2 pt-2 px-1">
-          <div className="relative flex items-center mt-1">
+        <div className="flex items-start gap-2 pt-1 px-1">
+          <div className="relative flex items-center mt-0.5">
             <input
               type="checkbox"
               checked={agreedToTerms}
               onChange={(e) => setAgreedToTerms(e.target.checked)}
-              className="peer appearance-none w-4 h-4 border border-white/20 rounded bg-white/5 checked:bg-violet-500 checked:border-violet-500 transition-all cursor-pointer"
+              className="peer appearance-none w-3.5 h-3.5 border border-white/20 rounded bg-white/5 checked:bg-blue-500 checked:border-blue-500 transition-all cursor-pointer"
             />
             <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity">
-              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+              <svg className="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
             </div>
           </div>
-          <label className="text-sm text-white/50 leading-tight">
-            I agree to the <span className="text-violet-400 hover:text-violet-300 cursor-pointer transition-colors">Terms of Service</span> and <span className="text-violet-400 hover:text-violet-300 cursor-pointer transition-colors">Privacy Policy</span>.
+          <label className="text-[11px] lg:text-xs text-white/40 leading-tight">
+            I agree to the <span className="text-blue-400 hover:text-blue-300 cursor-pointer transition-colors">Terms</span> and <span className="text-blue-400 hover:text-blue-300 cursor-pointer transition-colors">Privacy Policy</span>.
           </label>
         </div>
 
 
-        <div className="pt-4 space-y-4">
+        <div className="pt-1.5 space-y-2.5">
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={{ scale: loading ? 1 : 1.02 }}
-            whileTap={{ scale: loading ? 1 : 0.98 }}
-            className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-violet-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            whileHover={{ scale: loading ? 1 : 1.01 }}
+            whileTap={{ scale: loading ? 1 : 0.99 }}
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-2.5 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-wider"
           >
             {loading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                {isGoogleSignIn ? "Completing Profile..." : "Creating Account..."}
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {isGoogleSignIn ? "Completing..." : "Creating..."}
               </>
             ) : (
               isGoogleSignIn ? "Complete Profile" : "Create Account"
@@ -284,21 +292,21 @@ export default function Register() {
 
           {!isGoogleSignIn && (
             <>
-              <div className="relative flex items-center py-2">
-                <div className="flex-grow border-t border-white/10"></div>
-                <span className="flex-shrink-0 mx-4 text-white/30 text-xs uppercase tracking-wider">Or continue with</span>
-                <div className="flex-grow border-t border-white/10"></div>
+              <div className="relative flex items-center py-1">
+                <div className="flex-grow border-t border-white/5"></div>
+                <span className="flex-shrink-0 mx-4 text-white/20 text-[10px] uppercase tracking-widest font-bold">Or</span>
+                <div className="flex-grow border-t border-white/5"></div>
               </div>
 
               <motion.button
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                whileHover={{ scale: loading ? 1 : 1.02 }}
-                whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium py-3.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50"
+                whileHover={{ scale: loading ? 1 : 1.01 }}
+                whileTap={{ scale: loading ? 1 : 0.99 }}
+                className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium py-2.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 text-sm"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -323,11 +331,11 @@ export default function Register() {
         </div>
 
         {!isGoogleSignIn && (
-          <p className="text-center text-white/40 text-sm pt-4">
+          <p className="text-center text-white/30 text-xs pt-2">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-violet-400 hover:text-white transition-colors font-semibold"
+              className="text-blue-400 hover:text-white transition-colors font-bold"
             >
               Login here
             </Link>

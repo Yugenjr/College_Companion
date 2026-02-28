@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  BookOpen, 
-  Target, 
-  Heart, 
-  MapPin, 
+import {
+  BookOpen,
+  Target,
+  Heart,
+  MapPin,
   GraduationCap,
   AlertCircle,
   Loader2,
@@ -100,12 +100,12 @@ export default function Onboarding() {
         return (
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-pink-500/20 rounded-full">
-                <GraduationCap className="w-6 h-6 text-pink-400" />
+              <div className="p-3 bg-blue-500/20 rounded-full">
+                <GraduationCap className="w-6 h-6 text-blue-400" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Which semester are you in?</h2>
-                <p className="text-gray-400 text-sm">Help us tailor your experience</p>
+                <p className="text-white/40 text-sm">Help us tailor your experience</p>
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
@@ -116,11 +116,10 @@ export default function Onboarding() {
                   onClick={() => handleChange("semester", sem.toString())}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`py-4 rounded-lg font-semibold transition ${
-                    formData.semester === sem.toString()
-                      ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg"
-                      : "bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10"
-                  }`}
+                  className={`py-4 rounded-lg font-semibold transition ${formData.semester === sem.toString()
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20"
+                      : "bg-white/5 text-white/40 border border-white/10 hover:bg-white/10"
+                    }`}
                 >
                   {sem}
                 </motion.button>
@@ -133,12 +132,12 @@ export default function Onboarding() {
         return (
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-purple-500/20 rounded-full">
-                <BookOpen className="w-6 h-6 text-purple-400" />
+              <div className="p-3 bg-indigo-500/20 rounded-full">
+                <BookOpen className="w-6 h-6 text-indigo-400" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">What's your most difficult subject?</h2>
-                <p className="text-gray-400 text-sm">We'll provide extra support for this</p>
+                <p className="text-white/40 text-sm">We'll provide extra support for this</p>
               </div>
             </div>
             <input
@@ -146,7 +145,7 @@ export default function Onboarding() {
               value={formData.difficultSubject}
               onChange={(e) => handleChange("difficultSubject", e.target.value)}
               placeholder="e.g., Data Structures, Calculus, Quantum Physics"
-              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
             />
           </div>
         );
@@ -155,12 +154,12 @@ export default function Onboarding() {
         return (
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-pink-500/20 rounded-full">
-                <Target className="w-6 h-6 text-pink-400" />
+              <div className="p-3 bg-blue-500/20 rounded-full">
+                <Target className="w-6 h-6 text-blue-400" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Which area do you need the most help in?</h2>
-                <p className="text-gray-400 text-sm">Let us know where to focus</p>
+                <p className="text-white/40 text-sm">Let us know where to focus</p>
               </div>
             </div>
             <input
@@ -168,7 +167,7 @@ export default function Onboarding() {
               value={formData.helpArea}
               onChange={(e) => handleChange("helpArea", e.target.value)}
               placeholder="e.g., Time management, Project work, Exam preparation"
-              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
         );
@@ -177,12 +176,12 @@ export default function Onboarding() {
         return (
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-purple-500/20 rounded-full">
-                <Heart className="w-6 h-6 text-purple-400" />
+              <div className="p-3 bg-indigo-500/20 rounded-full">
+                <Heart className="w-6 h-6 text-indigo-400" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">What are your hobbies?</h2>
-                <p className="text-gray-400 text-sm">All work and no play makes learning dull</p>
+                <p className="text-white/40 text-sm">All work and no play makes learning dull</p>
               </div>
             </div>
             <input
@@ -190,7 +189,7 @@ export default function Onboarding() {
               value={formData.hobbies}
               onChange={(e) => handleChange("hobbies", e.target.value)}
               placeholder="e.g., Gaming, Reading, Music, Sports, Coding"
-              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
             />
           </div>
         );
@@ -212,7 +211,7 @@ export default function Onboarding() {
               value={formData.homeDistance}
               onChange={(e) => handleChange("homeDistance", e.target.value)}
               placeholder="e.g., 5 km, 30 minutes, Same city"
-              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
         );
@@ -223,11 +222,14 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:via-purple-900 dark:to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Grid Overlay */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:32px_32px] pointer-events-none" />
+
       {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/30 dark:bg-purple-500/20 rounded-full mix-blend-multiply filter blur-xl"
+          className="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full mix-blend-screen filter blur-[120px]"
           animate={{
             scale: [1, 1.2, 1],
             x: [0, 50, 0],
@@ -240,7 +242,7 @@ export default function Onboarding() {
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500/30 dark:bg-pink-500/20 rounded-full mix-blend-multiply filter blur-xl"
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-600/10 rounded-full mix-blend-screen filter blur-[120px]"
           animate={{
             scale: [1, 1.3, 1],
             x: [0, -50, 0],
@@ -261,19 +263,21 @@ export default function Onboarding() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-2xl"
       >
-        <div className="bg-white/90 dark:bg-dark-surface/90 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
+        <div className="bg-white/5 backdrop-blur-3xl rounded-[2.5rem] p-10 shadow-2xl border border-white/10 overflow-hidden relative group font-outfit">
+          {/* Hover Glow Effect */}
+          <div className="absolute -inset-24 bg-blue-600/5 blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
           {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300">Question {currentStep} of {totalSteps}</span>
-              <span className="text-sm text-gray-600 dark:text-gray-300">{Math.round((currentStep / totalSteps) * 100)}%</span>
+          <div className="mb-10">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-sm font-medium text-white/40">Question {currentStep} of {totalSteps}</span>
+              <span className="text-sm font-bold text-blue-400">{Math.round((currentStep / totalSteps) * 100)}%</span>
             </div>
-            <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden border border-white/10">
               <motion.div
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-600 dark:from-pink-500 dark:to-purple-500"
+                className="h-full bg-gradient-to-r from-blue-500 to-indigo-600"
                 initial={{ width: 0 }}
                 animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               />
             </div>
           </div>
@@ -301,28 +305,28 @@ export default function Onboarding() {
           </motion.div>
 
           {/* Navigation Buttons */}
-          <div className="flex gap-4 mt-8">
+          <div className="flex gap-4 mt-10">
             {currentStep > 1 && (
               <motion.button
                 type="button"
                 onClick={handlePrevious}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-6 py-3 bg-white/5 border border-white/20 text-white rounded-lg hover:bg-white/10 transition"
+                className="px-8 py-4 bg-white/5 border border-white/10 text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300"
               >
                 Previous
               </motion.button>
             )}
-            
+
             {currentStep < totalSteps ? (
               <motion.button
                 type="button"
                 onClick={handleNext}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-pink-500/50 transition"
+                className="flex-1 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:from-blue-500 hover:to-indigo-500 transition-all duration-300 uppercase tracking-wider text-sm"
               >
-                Next
+                Next Step
               </motion.button>
             ) : (
               <motion.button
@@ -331,7 +335,7 @@ export default function Onboarding() {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="flex-1 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-pink-500/50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:from-blue-500 hover:to-indigo-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 uppercase tracking-wider text-sm"
               >
                 {loading ? (
                   <>

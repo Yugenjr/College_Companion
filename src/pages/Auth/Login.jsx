@@ -91,14 +91,14 @@ export default function Login() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-xl text-sm flex items-center gap-2"
+          className="mb-4 bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-2 rounded-xl text-xs flex items-center gap-2"
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
+          <div className="w-1 h-1 rounded-full bg-red-400" />
           {error}
         </motion.div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <AuthInput
           label="Email Address"
           type="email"
@@ -123,25 +123,25 @@ export default function Login() {
           />
 
           {/* Remember Me & Forgot Password Row */}
-          <div className="flex items-center justify-between mt-3 px-1">
+          <div className="flex items-center justify-between mt-2.5 px-1">
             <label className="flex items-center gap-2 cursor-pointer group">
               <div className="relative flex items-center">
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="peer appearance-none w-4 h-4 border border-white/20 rounded bg-white/5 checked:bg-violet-500 checked:border-violet-500 transition-all"
+                  className="peer appearance-none w-3.5 h-3.5 border border-white/20 rounded bg-white/5 checked:bg-blue-500 checked:border-blue-500 transition-all"
                 />
                 <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity">
-                  <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                  <svg className="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                 </div>
               </div>
-              <span className="text-sm text-white/50 group-hover:text-white/70 transition-colors">Remember me</span>
+              <span className="text-[11px] text-white/50 group-hover:text-white/70 transition-colors">Remember me</span>
             </label>
 
             <Link
               to="#"
-              className="text-sm text-violet-400 hover:text-violet-300 transition-colors"
+              className="text-[11px] text-blue-400 hover:text-blue-300 transition-colors"
             >
               Forgot Password?
             </Link>
@@ -149,30 +149,30 @@ export default function Login() {
         </div>
 
         {/* Action Buttons */}
-        <div className="space-y-4 pt-2">
+        <div className="space-y-3 pt-1">
           <motion.button
-            whileHover={{ scale: loading ? 1 : 1.02 }}
-            whileTap={{ scale: loading ? 1 : 0.98 }}
+            whileHover={{ scale: loading ? 1 : 1.01 }}
+            whileTap={{ scale: loading ? 1 : 0.99 }}
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-violet-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-wider"
           >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
           </motion.button>
 
-          <div className="relative flex items-center py-2">
-            <div className="flex-grow border-t border-white/10"></div>
-            <span className="flex-shrink-0 mx-4 text-white/30 text-xs uppercase tracking-wider">Or continue with</span>
-            <div className="flex-grow border-t border-white/10"></div>
+          <div className="relative flex items-center py-1">
+            <div className="flex-grow border-t border-white/5"></div>
+            <span className="flex-shrink-0 mx-4 text-white/20 text-[10px] font-bold uppercase tracking-widest">Or</span>
+            <div className="flex-grow border-t border-white/5"></div>
           </div>
 
           <motion.button
             type="button"
             onClick={handleGoogleSignIn}
-            whileHover={{ scale: loading ? 1 : 1.02 }}
-            whileTap={{ scale: loading ? 1 : 0.98 }}
+            whileHover={{ scale: loading ? 1 : 1.01 }}
+            whileTap={{ scale: loading ? 1 : 0.99 }}
             disabled={loading}
-            className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium py-3.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50"
+            className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium py-2.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 text-sm"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -196,9 +196,9 @@ export default function Login() {
           </motion.button>
         </div>
 
-        <p className="text-center text-white/40 text-sm pt-4">
+        <p className="text-center text-white/30 text-xs pt-3">
           Don't have an account?{" "}
-          <Link to="/register" className="text-violet-400 hover:text-white transition-colors font-semibold">
+          <Link to="/register" className="text-blue-400 hover:text-white transition-colors font-bold">
             Create Account
           </Link>
         </p>
