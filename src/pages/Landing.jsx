@@ -1,4 +1,3 @@
-import ThemeToggle from '../components/ThemeToggle';
 import LandingNavbar from '../components/LandingNavbar';
 import HeroSection from './Landing/HeroSection';
 import StatsSection from './Landing/StatsSection';
@@ -11,10 +10,7 @@ import BackToTop from '../components/BackToTop';
 
 const Landing = () => {
     return (
-        <div className="min-h-screen bg-[#0a0a0f] relative overflow-hidden selection:bg-blue-500/30">
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
+        <div className="min-h-screen bg-black relative overflow-hidden selection:bg-blue-500/30">
 
             {/* Global grain texture overlay */}
             <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[60] mix-blend-overlay">

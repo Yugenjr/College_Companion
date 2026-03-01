@@ -37,8 +37,7 @@ const StatsSection = () => {
 
     return (
         <section className="relative py-20 bg-dark-deep border-y border-white/5 overflow-hidden">
-            {/* Subtle background glow for the whole section */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+            {/* Subtle background glow removed */}
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-12">

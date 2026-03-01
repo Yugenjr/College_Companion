@@ -1,19 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
-/* Force dark background globally */
-html,
-body {
-  background: #050505 !important;
-  color: #fafafa;
-  min-height: 100%;
-}
-
-/* Smooth transition when switching modes */
-* {
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
+/* 
+   RESTORING ORIGINAL DARK THEME FROM index-neon.css
+   -------------------------------------------------
+   This ensures the dark theme remains untouched (Pure Black/Neon).
+*/
 
 @layer base {
   :root {
@@ -26,23 +18,21 @@ body {
     padding: 0;
   }
 
-  html {
-    background: #050505 !important;
-    color-scheme: dark;
-  }
-
   body {
-    @apply text-white font-body antialiased;
-    background: #050505 !important;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     min-width: 320px;
     min-height: 100vh;
     overflow-x: hidden;
     color-scheme: dark;
   }
 
-  #root {
-    background: #050505 !important;
-    min-height: 100vh;
+  html {
+    background-color: #000000;
+    color-scheme: dark;
   }
 }
 
@@ -50,45 +40,54 @@ body {
 
   /* Neon Text */
   .neon-text {
-    @apply text-transparent bg-clip-text bg-primary-gradient;
+    background-image: linear-gradient(135deg, #9d4edd 0%, #4cc9f0 50%, #ff5ecd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     text-shadow: 0 0 20px rgba(157, 78, 221, 0.6), 0 0 30px rgba(76, 201, 240, 0.4);
   }
 
-  /* Neon Borders */
+  /* Neon Border */
   .neon-border {
-    @apply border border-neonPurple;
+    border: 1px solid #9d4edd;
     box-shadow: 0 0 15px rgba(157, 78, 221, 0.5), inset 0 0 15px rgba(157, 78, 221, 0.2);
   }
 
   .neon-border-blue {
-    @apply border border-neonBlue;
+    border: 1px solid #4cc9f0;
     box-shadow: 0 0 15px rgba(76, 201, 240, 0.5), inset 0 0 15px rgba(76, 201, 240, 0.2);
   }
 
   .neon-border-pink {
-    @apply border border-neonPink;
+    border: 1px solid #ff5ecd;
     box-shadow: 0 0 15px rgba(255, 94, 205, 0.5), inset 0 0 15px rgba(255, 94, 205, 0.2);
   }
 
   /* Neon Card */
   .neon-card {
-    background: rgba(13, 13, 13, 0.7);
+    background-color: rgba(10, 10, 10, 0.8);
     backdrop-filter: blur(12px);
-    @apply rounded-neon p-6 border border-glassBorder;
-    box-shadow: 0 0 20px rgba(157, 78, 221, 0.15), 0 8px 32px rgba(31, 38, 135, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.15), 0 8px 32px 0 rgba(31, 38, 135, 0.2);
     transition: all 0.3s ease;
   }
 
   .neon-card:hover {
-    box-shadow: 0 0 25px rgba(157, 78, 221, 0.3);
+    border-color: rgba(157, 78, 221, 0.5);
+    box-shadow: 0 0 25px rgba(157, 78, 221, 0.3), 0 8px 32px 0 rgba(31, 38, 135, 0.3);
     transform: translateY(-2px);
   }
 
   /* Glass Card */
   .glass-card {
-    background: rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(12px);
-    @apply rounded-neon-lg p-6 border border-white/10;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
 
   /* Glow Effects */
@@ -104,37 +103,13 @@ body {
     text-shadow: 0 0 10px rgba(255, 94, 205, 0.8), 0 0 20px rgba(255, 94, 205, 0.5);
   }
 
-  /* Premium Theme */
+  /* Deep Dark Background Fix */
   .bg-dark-deep {
-    background: radial-gradient(circle at top center, #1b1b3a 0%, #050505 100%);
-  }
-
-  .glass-card-premium {
-    background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .btn-premium-primary {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    box-shadow: 0 0 30px rgba(59,130,246,0.4);
-  }
-
-  /* Blob Animation */
-  .animate-blob {
-    animation: blob 7s infinite;
-  }
-
-  @keyframes blob {
-    0% { transform: translate(0) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
-    100% { transform: translate(0) scale(1); }
+    background: #000000;
   }
 }
 
 @layer utilities {
-
   .bg-grid-white {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='white' stroke-opacity='0.03'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
   }
@@ -149,11 +124,193 @@ body {
   }
 }
 
-/* Light Mode */
+/* 
+  LIGHT MODE FIXES (PROFESSIONAL OVERRIDES)
+  -----------------------------------------
+*/
 html.light,
 html.light body,
 html.light #root {
-  background: #ffffff !important;
-  color: #1a1a1a !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
   color-scheme: light;
+}
+
+/* High-Contrast Professional Typography */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+html.light p,
+html.light span,
+html.light div {
+  color: #1a1a1a;
+}
+
+/* Surface & Background Overrides */
+html.light section,
+html.light main,
+html.light .bg-black,
+html.light .bg-dark-deep,
+html.light .bg-\[\#0a0a0f\],
+html.light .bg-\[\#050505\] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Icon visibility fix - Force icons that were white to be black */
+html.light svg.text-white,
+html.light .text-white svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Mockup backgrounds (Dashboard/AI Integration boxes) */
+html.light .bg-black\/40 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-white\/5,
+html.light .bg-white\/10 {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Professional Card Styling */
+html.light .glass-card,
+html.light .glass-card-premium,
+html.light .neon-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: none !important;
+}
+
+html.light .neon-card:hover {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.15) !important;
+}
+
+/* Specific text visibility */
+html.light .text-white\/40,
+html.light .text-white\/60,
+html.light .text-white\/70,
+html.light .text-white\/80 {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+html.light .text-white\/30,
+html.light .opacity-50 {
+  color: #64748b !important;
+  /* Secondary text color */
+}
+
+/* Maintain blue/indigo accents but with light-mode contrast */
+html.light .text-blue-400 {
+  color: #2563eb !important;
+}
+
+html.light .text-indigo-400 {
+  color: #4f46e5 !important;
+}
+
+html.light .text-purple-400 {
+  color: #7c3aed !important;
+}
+
+/* Dashboard Laser Effect in Light Mode */
+html.light .from-transparent.via-blue-500 {
+  background-image: linear-gradient(90deg, transparent, #2563eb, transparent) !important;
+}
+
+/* Navbar Tuning */
+html.light nav {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Buttons */
+html.light .btn-premium-primary,
+html.light .bg-white:not(nav) {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+html.light .btn-hero-secondary {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #000000 !important;
+}
+
+html.light .btn-hero-secondary:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .bg-white\/5:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* Grid Override */
+html.light .bg-grid-white {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='black' stroke-opacity='0.05'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E") !important;
+}
+
+/* Dashbord Image Overrides in Light Mode */
+html.light .relative.bg-black\/40 {
+  background-color: transparent !important;
+}
+
+html.light .scanning-laser {
+  display: none !important;
+}
+
+html.light img[alt="College Companion Dashboard"] {
+  opacity: 1 !important;
+}
+
+/* Footer Overrides in Light Mode */
+html.light footer {
+  background-color: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+html.light footer h4 {
+  color: #000000 !important;
+}
+
+html.light footer .text-white\/40,
+html.light footer p,
+html.light footer a {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+html.light footer .bg-white\/5 {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #000000 !important;
+}
+
+html.light footer .text-white\/20 svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  opacity: 1 !important;
+}
+
+html.light footer .bg-white\/5:hover {
+  background-color: #e2e8f0 !important;
+  color: #000000 !important;
+}
+
+/* Transitions */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease;
 }

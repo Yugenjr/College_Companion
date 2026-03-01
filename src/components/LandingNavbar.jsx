@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Sparkles, Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const LandingNavbar = () => {
     const navigate = useNavigate();
@@ -105,6 +106,7 @@ const LandingNavbar = () => {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex items-center gap-3">
+                    <ThemeToggle />
                     <button
                         onClick={() => navigate('/login')}
                         className="px-5 py-2.5 text-sm font-bold text-white/60 hover:text-white transition-all rounded-xl"
@@ -152,6 +154,13 @@ const LandingNavbar = () => {
                                 ))}
                             </div>
                             <div className="pt-6 border-t border-white/5 flex flex-col gap-4">
+                                <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white/5">
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold text-white">Theme</span>
+                                        <span className="text-[10px] text-white/40 uppercase tracking-wider font-black">Mode Selection</span>
+                                    </div>
+                                    <ThemeToggle />
+                                </div>
                                 <button
                                     onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
                                     className="w-full py-4 rounded-2xl bg-white/5 text-white font-bold"
