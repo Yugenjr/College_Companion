@@ -1,8 +1,14 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Sparkles, Twitter, Github, Linkedin, Mail, Heart } from 'lucide-react';
 
 const LandingFooter = () => {
+    const navigate = useNavigate();
+
+    const handleNavigation = (path) => {
+        navigate(path);
+    };
+
     return (
         <footer className="relative bg-[#050505] border-t border-white/5 pt-16 pb-8 overflow-hidden">
             {/* Background Glow */}
@@ -13,7 +19,7 @@ const LandingFooter = () => {
                     {/* Brand Section */}
                     <div className="lg:col-span-5 space-y-6">
                         <Link to="/" className="flex items-center gap-3 group">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform">
+                            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform">
                                 <Sparkles className="w-5 h-5 text-white" />
                             </div>
                             <span className="text-xl font-bold tracking-tight text-white font-outfit">College Companion</span>
@@ -46,9 +52,12 @@ const LandingFooter = () => {
                         <ul className="space-y-3">
                             {['Documentation', 'API Reference', 'Support'].map(item => (
                                 <li key={item}>
-                                    <a href="#" className="text-sm text-white/40 hover:text-white transition-colors font-medium">
+                                    <span
+                                        onClick={() => handleNavigation('/' + item.toLowerCase().replace(' ', '-'))}
+                                        className="text-sm text-white/40 hover:text-white transition-colors font-medium cursor-pointer"
+                                    >
                                         {item}
-                                    </a>
+                                    </span>
                                 </li>
                             ))}
                         </ul>
@@ -59,9 +68,12 @@ const LandingFooter = () => {
                         <ul className="space-y-3">
                             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(item => (
                                 <li key={item}>
-                                    <a href="#" className="text-sm text-white/40 hover:text-white transition-colors font-medium">
+                                    <span
+                                        onClick={() => handleNavigation('/' + item.toLowerCase().replace(/ /g, '-'))}
+                                        className="text-sm text-white/40 hover:text-white transition-colors font-medium cursor-pointer"
+                                    >
                                         {item}
-                                    </a>
+                                    </span>
                                 </li>
                             ))}
                         </ul>
@@ -80,7 +92,14 @@ const LandingFooter = () => {
                             { Icon: Linkedin, label: 'Linkedin', href: '#' },
                             { Icon: Mail, label: 'Mail', href: 'mailto:contact@collegecompanion.ai' }
                         ].map((item, i) => (
-                            <a key={i} href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.label} className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/20 hover:text-white hover:bg-indigo-500/20 transition-all">
+                            <a
+                                key={i}
+                                href={item.href}
+                                target={item.href.startsWith('http') ? "_blank" : undefined}
+                                rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
+                                aria-label={item.label}
+                                className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/20 hover:text-white hover:bg-indigo-500/20 transition-all"
+                            >
                                 {item.Icon && <item.Icon className="w-4 h-4" />}
                             </a>
                         ))}
