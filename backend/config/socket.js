@@ -2,6 +2,8 @@ import { Server } from 'socket.io';
 import StudyRoomChat from '../models/StudyRoomChat.js';
 import { getGroqClient } from '../services/groqService.js';
 import { generateAIResponse } from '../utils/geminiClient.js';
+import { getAuth } from './firebaseAdmin.js';
+import { getUserNotificationRoom } from '../utils/socketRooms.js';
 
 let io = null;
 
@@ -24,15 +26,53 @@ export const initializeSocketIO = (httpServer) => {
     }
   });
 
+  io.use(async (socket, next) => {
+    try {
+      const tokenFromAuth = socket.handshake.auth?.token;
+      const authHeader = socket.handshake.headers?.authorization;
+      const tokenFromHeader = authHeader?.startsWith('Bearer ')
+        ? authHeader.split('Bearer ')[1]
+        : null;
+      const token = tokenFromAuth || tokenFromHeader;
+
+      if (!token) {
+        return next();
+      }
+
+      const decodedToken = await getAuth().verifyIdToken(token);
+      socket.user = {
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+      };
+
+      return next();
+    } catch (error) {
+      console.warn('⚠️ Socket auth verification failed:', error.message);
+      return next(new Error('Unauthorized socket connection'));
+    }
+  });
+
   io.on('connection', (socket) => {
     console.log(`🔌 Socket connected: ${socket.id}`);
+
+    if (socket.user?.uid) {
+      const userRoom = getUserNotificationRoom(socket.user.uid);
+      socket.join(userRoom);
+      console.log(`🔔 User ${socket.user.uid} joined notification room: ${userRoom}`);
+    }
 
     // Join a study room
     socket.on('room:join', async ({ roomId, userId, userName }) => {
       try {
+        if (!roomId || !userName) {
+          return socket.emit('error', { message: 'roomId and userName are required' });
+        }
+
+        const safeUserId = socket.user?.uid || userId;
+
         socket.join(roomId);
         socket.roomId = roomId;
-        socket.userId = userId;
+        socket.userId = safeUserId;
         socket.userName = userName;
 
         console.log(`👤 ${userName} joined room: ${roomId}`);
@@ -51,7 +91,7 @@ export const initializeSocketIO = (httpServer) => {
 
         // Notify others in the room
         socket.to(roomId).emit('room:userJoined', {
-          userId,
+          userId: safeUserId,
           userName,
           timestamp: new Date()
         });
@@ -65,6 +105,8 @@ export const initializeSocketIO = (httpServer) => {
     // Handle chat message from user
     socket.on('chat:send', async ({ roomId, userId, userName, text }) => {
       try {
+        const safeUserId = socket.user?.uid || userId;
+
         if (!text || !text.trim()) {
           return socket.emit('error', { message: 'Message cannot be empty' });
         }
@@ -77,7 +119,7 @@ export const initializeSocketIO = (httpServer) => {
 
         const userMessage = {
           sender: 'user',
-          userId,
+          userId: safeUserId,
           userName,
           text: text.trim(),
           timestamp: new Date()
@@ -154,8 +196,9 @@ export const initializeSocketIO = (httpServer) => {
 
     // Handle typing indicator
     socket.on('chat:typing', ({ roomId, userId, userName, isTyping }) => {
+      const safeUserId = socket.user?.uid || userId;
       socket.to(roomId).emit('chat:userTyping', {
-        userId,
+        userId: safeUserId,
         userName,
         isTyping
       });
