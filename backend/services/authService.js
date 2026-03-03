@@ -1,18 +1,21 @@
 // Authentication Service
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import { DEFAULT_ROLE, isValidRole, normalizeRole } from '../utils/roles.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 const JWT_EXPIRES_IN = '7d';
 
 export async function signup({ username, email, password, role }) {
+  const normalizedRole = normalizeRole(role || DEFAULT_ROLE);
+
   const user = new User({
     _id: email,
     uid: email,
     email,
     profile: { fullName: username, email },
     password,
-    role: role || 'user',
+    role: isValidRole(normalizedRole) ? normalizedRole : DEFAULT_ROLE,
   });
   await user.save();
   return generateToken(user);
@@ -31,7 +34,7 @@ export function generateToken(user) {
     {
       uid: user.uid,
       email: user.email,
-      role: user.role,
+      role: normalizeRole(user.role),
     },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES_IN }
