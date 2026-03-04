@@ -94,6 +94,22 @@ Return ONLY a JSON array of questions in this format:
 
     await questionHistory.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId}`).emit('notification:receive', {
+        type: 'questions',
+        title: 'Questions Generated',
+        body: `Your ${questionType} questions have been generated and saved to your history.`,
+        data: questions,
+        source: 'questions',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send questions notification:', notifyError.message);
+    }
+
     res.json({
       success: true,
       questions,

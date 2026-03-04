@@ -148,6 +148,10 @@ app.use('/api/study-room-chat', studyRoomChatRoutes);
 app.use('/api/auction', auctionRoutes);
 app.use('/api/chat', chatRoutes);
 
+// Notification routes
+import notificationRoutes from './routes/notificationRoutes.js';
+app.use('/api/notifications', notificationRoutes);
+
 // Legacy routes (kept for backwards compatibility)
 app.use('/api', apiRoutes);
 app.use('/api/ai-attendance', aiAttendanceRoutes);

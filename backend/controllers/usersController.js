@@ -42,6 +42,22 @@ export const createUser = async (req, res) => {
 
     await newUser.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${uid}`).emit('notification:receive', {
+        type: 'user',
+        title: 'Welcome!',
+        body: 'Your user account has been created successfully.',
+        data: newUser,
+        source: 'user',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send user creation notification:', notifyError.message);
+    }
+
     res.json({
       success: true,
       message: 'User created successfully',
