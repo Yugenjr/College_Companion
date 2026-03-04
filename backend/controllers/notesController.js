@@ -17,15 +17,21 @@ export const createNote = async (req, res) => {
       });
     }
 
-    const note = new Note({
-      userId,
-      title,
-      content,
-      tags: tags || [],
-      type: type || 'other',
-    });
-
-    await note.save();
+    // Use findOneAndUpdate with upsert for idempotent note creation
+    const note = await Note.findOneAndUpdate(
+      { userId, title },
+      {
+        $setOnInsert: {
+          userId,
+          title,
+          content,
+          tags: tags || [],
+          type: type || 'other',
+          createdAt: new Date()
+        }
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
 
     // Trigger notification via Socket.IO (if available)
     try {

@@ -17,59 +17,47 @@ router.post('/setup', verifyFirebaseToken, async (req, res) => {
     console.log('📝 Profile setup request for UID:', uid);
     console.log('📝 Request data:', { name, fullName, email, phone, department, year, collegeName, degree, age });
 
-    // Check if user already exists
-    let user = await User.findOne({ uid });
-
-    if (user) {
-      console.log('✅ User already exists, updating profile...');
-      // Update existing profile
-      user.profile.fullName = fullName || name || user.profile.fullName;
-      if (email) user.profile.email = email;
-      if (phone) user.profile.phone = phone;
-      if (department) user.profile.department = department;
-      if (year) user.profile.year = year;
-      if (collegeName) user.profile.collegeName = collegeName;
-      if (degree) user.profile.course = degree;
-      if (age) user.profile.age = age;
-      user.profile.updatedAt = new Date();
-
-      await user.save();
-
-      return res.json({
-        success: true,
-        message: 'Profile updated successfully',
-        profile: user.profile,
-        isNewUser: false
-      });
-    }
-
-    // Create new user profile
-    console.log('🆕 Creating new user profile...');
-    user = new User({
-      uid,
-      profile: {
-        fullName: fullName || name || '',
-        email: email || '',
-        phone: phone || '',
-        department: department || '',
-        year: year || '',
-        collegeName: collegeName || '',
-        course: degree || '',
-        age: age || null,
-        photoURL: '',
-        semester: '',
-        updatedAt: new Date()
-      }
-    });
-
-    await user.save();
-    console.log('✅ User profile created successfully:', uid);
+    // Use findOneAndUpdate with upsert and $setOnInsert to avoid race conditions
+    const user = await User.findOneAndUpdate(
+      { uid },
+      {
+        $set: {
+          'profile.fullName': fullName || name,
+          'profile.email': email,
+          'profile.phone': phone,
+          'profile.department': department,
+          'profile.year': year,
+          'profile.collegeName': collegeName,
+          'profile.course': degree,
+          'profile.age': age,
+          'profile.updatedAt': new Date()
+        },
+        $setOnInsert: {
+          uid,
+          profile: {
+            fullName: fullName || name || '',
+            email: email || '',
+            phone: phone || '',
+            department: department || '',
+            year: year || '',
+            collegeName: collegeName || '',
+            course: degree || '',
+            age: age || null,
+            photoURL: '',
+            semester: '',
+            updatedAt: new Date()
+          }
+        }
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    console.log('✅ User profile created or updated:', uid);
 
     res.json({
       success: true,
-      message: 'Profile created successfully',
+      message: 'Profile created or updated successfully',
       profile: user.profile,
-      isNewUser: true
+      isNewUser: false // Upsert always returns the doc, so isNewUser is false
     });
 
   } catch (error) {
