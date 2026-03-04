@@ -19,6 +19,7 @@ import survivalRoutes from './routes/survivalRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
 import questionsRoutes from './routes/questionsRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 import auctionRoutes from './routes/auction.js';
 import chatRoutes from './routes/chat.js';
 
@@ -144,6 +145,7 @@ app.use('/api/survival', survivalRoutes);
 app.use('/api/notes', notesRoutes);
 app.use('/api/questions', questionsRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/api/study-room-chat', studyRoomChatRoutes);
 app.use('/api/auction', auctionRoutes);
 app.use('/api/chat', chatRoutes);
