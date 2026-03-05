@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { RoomProvider } from "./contexts/RoomContext";
@@ -17,6 +17,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
 import Pricing from "./pages/Pricing.jsx";
 import CookiePolicy from "./pages/CookiePolicy";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
 
               {/* Onboarding - Protected */}
               <Route path="/onboarding" element={
@@ -56,8 +60,8 @@ function App() {
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
               </Route>
 
-              {/* Catch all - redirect to login */}
-              <Route path="*" element={<Navigate to="/login" replace />} />
+              {/* Catch all - Show 404 Page */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </RoomProvider>
         </AuthProvider>

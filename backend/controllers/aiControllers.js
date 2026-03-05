@@ -212,7 +212,6 @@ export const askDoubt = async (req, res) => {
     }
 
     user.savedChats.push({
-      type: 'doubt',
       question,
       context,
       answer,
@@ -226,6 +225,7 @@ export const askDoubt = async (req, res) => {
     console.error('❌ Doubt solver error:', error.message);
     res.status(500).json({ success: false, error: error.message, code: 500 });
   }
+      try {
 };
 
 /**

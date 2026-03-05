@@ -1,0 +1,165 @@
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 75px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-toggle-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* Dark mode toggle button */
+.dark .theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ========================================
+   LIGHT MODE OVERRIDES
+   ======================================== */
+
+/* Main backgrounds */
+html.light,
+html.light body,
+html.light #root {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+}
+
+/* Override all dark background classes */
+html.light .bg-\[\#0a0a0f\],
+html.light .bg-\[\#050505\],
+html.light .bg-\[\#13111c\],
+html.light .bg-\[\#1a1a1a\],
+html.light .from-\[\#0a0a0f\],
+html.light .via-\[\#13111c\],
+html.light .to-\[\#0a0a0f\] {
+    background: #f8f9fa !important;
+}
+
+/* Light mode gradient backgrounds */
+html.light [class*="bg-gradient"] {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 50%, #fce4ec 100%) !important;
+}
+
+/* Text colors in light mode */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6,
+html.light p,
+html.light span,
+html.light div {
+    color: #1a1a1a !important;
+}
+
+/* Specific text that should stay visible */
+html.light .text-white,
+html.light .text-gray-100,
+html.light .text-gray-200 {
+    color: #1a1a1a !important;
+}
+
+html.light .text-gray-400,
+html.light .text-gray-500 {
+    color: #666666 !important;
+}
+
+/* Cards and containers in light mode */
+html.light [class*="bg-white"],
+html.light [class*="bg-gray"] {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* Glassmorphism effects in light mode */
+html.light [class*="backdrop-blur"],
+html.light [class*="bg-opacity"] {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Buttons in light mode */
+html.light button:not(.theme-toggle) {
+    background: #7c3aed !important;
+    color: #ffffff !important;
+    border-color: #7c3aed !important;
+}
+
+html.light button:not(.theme-toggle):hover {
+    background: #6d28d9 !important;
+}
+
+/* Links in light mode */
+html.light a {
+    color: #7c3aed !important;
+}
+
+/* Neon/glow effects - reduce in light mode */
+html.light [class*="shadow-neon"],
+html.light [class*="glow"] {
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Images and media - remove border to keep visible */
+html.light img {
+    border: none !important;
+    filter: none !important;
+}
+
+/* Footer in light mode */
+html.light footer {
+    background: #f8f9fa !important;
+    border-top: 1px solid #e0e0e0 !important;
+}
+
+/* Stats and feature cards */
+html.light [class*="stat"],
+html.light [class*="feature"],
+html.light [class*="card"] {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ============================================
+   PRESERVE DASHBOARD IN LIGHT MODE
+   ============================================ */
+
+/* Don't apply light mode to dashboard/protected pages */
+html.light main,
+html.light main *,
+html.light aside,
+html.light aside *,
+html.light [role="main"],
+html.light [role="main"] * {
+    background: revert !important;
+    color: revert !important;
+    border: revert !important;
+}

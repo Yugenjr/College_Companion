@@ -160,6 +160,27 @@ export const API = {
   deleteProfile: () => apiRequest('/api/profile/delete', {
     method: 'DELETE',
   }),
+  // Kindness Auction House
+  getAuctionItems: () => apiRequest('/api/auction/items'),
+  bidKindness: (itemId, data) => apiRequest(`/api/auction/${itemId}/bid`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  claimItem: (itemId) => apiRequest(`/api/auction/${itemId}/claim`, {
+    method: 'POST',
+  }),
+  donateItem: (itemId, data) => apiRequest(`/api/auction/${itemId}/donate`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  tradeItem: (itemId, data) => apiRequest(`/api/auction/${itemId}/trade`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  startKindnessChain: (itemId, data) => apiRequest(`/api/auction/${itemId}/chain`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
 };
 
 export default API;
