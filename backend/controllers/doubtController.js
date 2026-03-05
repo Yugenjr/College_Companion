@@ -20,10 +20,19 @@ export const askDoubt = async (req, res) => {
     }
 
     // Fetch user's notes for context
-    const userNotes = await Note.find({ userId })
-      .sort({ createdAt: -1 })
-      .limit(20)
-      .select('title content tags');
+    let userNotes = [];
+    try {
+      userNotes = await Note.find({ userId })
+        .sort({ createdAt: -1 })
+        .limit(20)
+        .select('title content tags');
+    } catch (noteError) {
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to fetch user notes',
+        details: noteError.message,
+      });
+    }
 
     // Build context from notes
     let notesContext = '';
@@ -63,21 +72,39 @@ Question: ${question}
 
 Provide a detailed answer based on the notes above.`;
 
-    const answer = await generateCompletion(systemPrompt, userPrompt, {
-      temperature: 0.7,
-      max_tokens: 1500,
-    });
+    let answer;
+    try {
+      // Complex logic: AI-powered answer generation based on notes
+      answer = await generateCompletion(systemPrompt, userPrompt, {
+        temperature: 0.7,
+        max_tokens: 1500,
+      });
+    } catch (aiError) {
+      return res.status(500).json({
+        success: false,
+        error: 'AI answer generation failed',
+        details: aiError.message,
+      });
+    }
 
     // Save doubt to database
-    const doubt = new Doubt({
-      userId,
-      question,
-      contextNotes,
-      answer,
-      sources,
-    });
-
-    await doubt.save();
+    let doubt;
+    try {
+      doubt = new Doubt({
+        userId,
+        question,
+        contextNotes,
+        answer,
+        sources,
+      });
+      await doubt.save();
+    } catch (dbError) {
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to save doubt',
+        details: dbError.message,
+      });
+    }
 
     res.json({
       success: true,

@@ -174,7 +174,6 @@ export const getAttendanceHistory = async (req, res) => {
   try {
     const { userId } = req.query;
 
-    if (!userId) {
       return res.status(400).json({
         success: false,
         error: 'Missing userId parameter',
@@ -187,6 +186,7 @@ export const getAttendanceHistory = async (req, res) => {
       .select('-context -__v'); // Exclude large context object
 
     res.json({
+    try {
       success: true,
       history,
       count: history.length,

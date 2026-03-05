@@ -9,6 +9,9 @@ import { initializeFirebaseAdmin } from './config/firebaseAdmin.js';
 import { initializeGroqClient } from './services/groqService.js';
 import { initializeGeminiClient } from './utils/geminiClient.js';
 import { initializeSocketIO } from './config/socket.js';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import { saveMessage } from './services/chatService.js';
 
 // Import NEW user-scoped routes
 import profileRoutes from './routes/profileRoutes.js';
@@ -16,6 +19,8 @@ import survivalRoutes from './routes/survivalRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
 import questionsRoutes from './routes/questionsRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
+import auctionRoutes from './routes/auction.js';
+import chatRoutes from './routes/chat.js';
 
 // Import legacy routes (kept for backwards compatibility)
 import apiRoutes from './routes/apiRoutes.js';
@@ -23,6 +28,10 @@ import aiAttendanceRoutes from './routes/aiAttendance.js';
 
 // Import study room chat routes
 import studyRoomChatRoutes from './routes/studyRoomChatRoutes.js';
+
+// Import authentication and protected routes
+import authRoutes from './routes/auth.js';
+import protectedRoutes from './routes/protected.js';
 
 // Load environment variables
 dotenv.config();
@@ -76,6 +85,10 @@ try {
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Rate limiting middleware
+import { apiRateLimiter } from './middleware/rateLimiter.js';
+app.use(apiRateLimiter);
 
 // CORS Configuration - Allow all localhost origins for development
 const allowedOrigins = process.env.ALLOWED_ORIGINS
@@ -132,10 +145,16 @@ app.use('/api/notes', notesRoutes);
 app.use('/api/questions', questionsRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/study-room-chat', studyRoomChatRoutes);
+app.use('/api/auction', auctionRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Legacy routes (kept for backwards compatibility)
 app.use('/api', apiRoutes);
 app.use('/api/ai-attendance', aiAttendanceRoutes);
+
+// Authentication and protected routes
+app.use('/api/auth', authRoutes);
+app.use('/api', protectedRoutes);
 
 // Catch-all Handler
 app.use((req, res) => {
@@ -229,21 +248,10 @@ try {
   console.warn('⚠️  Study Arena chat will not work.\n');
 }
 
-// Start server
-httpServer.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`📍 Health check: http://localhost:${PORT}/health`);
-  console.log(`📍 API base: http://localhost:${PORT}/api`);
-  console.log(`🔌 WebSocket: ws://localhost:${PORT}\n`);
-  console.log('🔒 USER-SCOPED API (Firebase Auth Required):');
-  console.log('  📋 Profile: /api/profile');
-  console.log('  🛡️  Survival Kit: /api/survival');
-  console.log('  📝 Notes Repository: /api/notes');
-  console.log('  ❓ Questions Generator: /api/questions');
-  console.log('  📊 Attendance Advisor: /api/attendance');
-  console.log('  💬 Study Arena Chat: /socket.io (WebSocket)\n');
-  console.log('✨ All user data persists across logout/login');
-  console.log('✨ Each user has isolated dataset in MongoDB\n');
+// Start HTTP & Socket.io server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 // Graceful shutdown
