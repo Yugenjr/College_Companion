@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { normalizeRole } from '../utils/roles.js';
 
 /**
  * USER-SCOPED DATA MODEL
@@ -101,9 +102,21 @@ const userSchema = new mongoose.Schema({
 
   // Authentication fields
   password: { type: String, required: false },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' }
+  role: {
+    type: String,
+    enum: ['student', 'moderator', 'admin'],
+    default: 'student',
+    set: (value) => normalizeRole(value)
+  }
 }, {
   timestamps: true
+});
+
+userSchema.pre('validate', function (next) {
+  if (this.role) {
+    this.role = normalizeRole(this.role);
+  }
+  next();
 });
 
 // Password hashing middleware
