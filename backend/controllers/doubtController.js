@@ -112,6 +112,22 @@ Provide a detailed answer based on the notes above.`;
       sources,
       doubtId: doubt._id,
     });
+
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId}`).emit('notification:receive', {
+        type: 'doubt',
+        title: 'Doubt Answered',
+        body: 'Your doubt has been answered by the AI assistant.',
+        data: { question, answer, sources },
+        source: 'doubt',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send doubt notification:', notifyError.message);
+    }
   } catch (error) {
     console.error('❌ Ask doubt error:', error.message);
     res.status(500).json({

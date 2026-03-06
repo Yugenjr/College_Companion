@@ -107,6 +107,22 @@ export const updateProfile = async (req, res) => {
       message: 'Profile updated successfully',
       profile: profile.toSafeObject(),
     });
+
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${uid}`).emit('notification:receive', {
+        type: 'profile',
+        title: 'Profile Updated',
+        body: 'Your profile has been updated successfully.',
+        data: profile.toSafeObject(),
+        source: 'profile',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send profile notification:', notifyError.message);
+    }
   } catch (error) {
     console.error('Error in updateProfile:', error);
     res.status(500).json({

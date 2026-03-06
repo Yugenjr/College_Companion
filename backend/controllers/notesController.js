@@ -27,6 +27,22 @@ export const createNote = async (req, res) => {
 
     await note.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId}`).emit('notification:receive', {
+        type: 'note',
+        title: 'New Note Created',
+        body: `Your note "${title}" has been created successfully.`,
+        data: note,
+        source: 'notes',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send note notification:', notifyError.message);
+    }
+
     res.status(201).json({
       success: true,
       note,

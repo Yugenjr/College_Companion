@@ -43,6 +43,22 @@ export const generateQuestions = async (req, res) => {
     user.updatedAt = new Date();
     await user.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${uid}`).emit('notification:receive', {
+        type: 'questions',
+        title: 'Questions Generated',
+        body: `Your ${questionType} questions have been generated and saved to your history.`,
+        data: result.questions,
+        source: 'questions',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send questions notification:', notifyError.message);
+    }
+
     res.json({
       success: true,
       questions: result.questions,

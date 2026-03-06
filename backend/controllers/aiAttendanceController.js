@@ -179,6 +179,7 @@ Please provide a helpful and accurate response.`;
 
     // Return successful response
     res.json({
+
       success: true,
       response: aiResponse,
       metadata: {
@@ -189,6 +190,25 @@ Please provide a helpful and accurate response.`;
         timestamp: new Date().toISOString()
       }
     });
+
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const userId = req.user?.uid;
+      if (userId) {
+        const { getIO } = await import('../config/socket.js');
+        const io = getIO();
+        io.to(`user:${userId}`).emit('notification:receive', {
+          type: 'ai-attendance',
+          title: 'AI Attendance Response',
+          body: 'Your AI attendance query has been processed.',
+          data: aiResponse,
+          source: 'ai-attendance',
+          createdAt: new Date()
+        });
+      }
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send AI attendance notification:', notifyError.message);
+    }
 
   } catch (error) {
     console.error('❌ AI chat controller error:', error.message);

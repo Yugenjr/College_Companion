@@ -24,8 +24,37 @@ export const initializeSocketIO = (httpServer) => {
     }
   });
 
-  io.on('connection', (socket) => {
+  // Firebase token verification helper
+  async function verifySocketToken(token) {
+    if (!token) throw new Error('No token provided');
+    const { getAuth } = await import('../config/firebaseAdmin.js');
+    return await getAuth().verifyIdToken(token);
+  }
+
+  io.on('connection', async (socket) => {
     console.log(`🔌 Socket connected: ${socket.id}`);
+
+    // Authenticate on connect (token in handshake query)
+    let userAuth = null;
+    const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+    if (token) {
+      try {
+        userAuth = await verifySocketToken(token);
+        socket.userId = userAuth.uid;
+        socket.userEmail = userAuth.email;
+        console.log(`✅ Authenticated socket for user: ${userAuth.uid}`);
+      } catch (authError) {
+        console.warn('❌ Invalid socket token:', authError.message);
+        socket.emit('error', { message: 'Authentication failed' });
+        socket.disconnect();
+        return;
+      }
+    } else {
+      console.warn('❌ No token provided for socket connection');
+      socket.emit('error', { message: 'No authentication token' });
+      socket.disconnect();
+      return;
+    }
 
     // Join a study room
     socket.on('room:join', async ({ roomId, userId, userName }) => {
@@ -59,6 +88,56 @@ export const initializeSocketIO = (httpServer) => {
       } catch (error) {
         console.error('❌ Error joining room:', error);
         socket.emit('error', { message: 'Failed to join room' });
+      }
+    });
+
+    // User-specific notification
+    socket.on('notification:user', async ({ userId, type, title, body, data, source }) => {
+      try {
+        // Save notification to DB
+        const notification = new Notification({ userId, type, title, body, data, source });
+        await notification.save();
+        // Emit to user channel
+        io.to(`user:${userId}`).emit('notification:receive', notification);
+      } catch (error) {
+        console.error('❌ Error sending user notification:', error);
+      }
+    });
+
+    // Group broadcast notification
+    socket.on('notification:group', async ({ group, type, title, body, data, source }) => {
+      try {
+        // Save notification to DB for each user in group (assume group is array of userIds)
+        if (Array.isArray(group)) {
+          for (const userId of group) {
+            const notification = new Notification({ userId, type, title, body, data, group: group.join(','), source });
+            await notification.save();
+            io.to(`user:${userId}`).emit('notification:receive', notification);
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error sending group notification:', error);
+      }
+    });
+
+    // System-wide notification
+    socket.on('notification:system', async ({ type, title, body, data, source }) => {
+      try {
+        // Emit to all connected clients
+        io.emit('notification:receive', { type, title, body, data, source, createdAt: new Date() });
+      } catch (error) {
+        console.error('❌ Error sending system notification:', error);
+      }
+    });
+
+    // Join user-specific channel for notifications (token required)
+    socket.on('user:subscribe', async ({ token }) => {
+      try {
+        const auth = await verifySocketToken(token);
+        socket.join(`user:${auth.uid}`);
+        console.log(`🔔 User ${auth.uid} subscribed to notifications.`);
+      } catch (err) {
+        socket.emit('error', { message: 'Subscription authentication failed' });
       }
     });
 
