@@ -8,12 +8,8 @@ const HeroSection = () => {
 
     return (
         <section className="relative pt-32 pb-20 overflow-hidden bg-black">
-            {/* Background elements */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-blue-600/10 blur-[120px] rounded-full opacity-50" />
-                <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/10 blur-[100px] rounded-full opacity-30" />
-                <div className="absolute top-1/2 -right-24 w-80 h-80 bg-purple-600/10 blur-[100px] rounded-full opacity-20" />
-            </div>
+            {/* Background elements removed to fix "blue type" theme issue */}
+            <div className="absolute inset-0 z-0 bg-black" />
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
                 {/* Badge */}
@@ -71,7 +67,7 @@ const HeroSection = () => {
                         onClick={() => {
                             document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
                         }}
-                        className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all active:scale-95"
+                        className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all active:scale-95 btn-hero-secondary"
                     >
                         See how it works
                     </button>
@@ -109,13 +105,13 @@ const HeroSection = () => {
                                     repeat: Infinity,
                                     ease: "linear"
                                 }}
-                                className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent z-10 opacity-50 shadow-[0_0_15px_rgba(59,130,246,1)] pointer-events-none"
+                                className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent z-10 opacity-50 shadow-[0_0_15px_rgba(59,130,246,1)] pointer-events-none scanning-laser"
                             />
 
                             <img
                                 src={dashboardPreview}
                                 alt="College Companion Dashboard"
-                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
+                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 light:opacity-100 transition-all duration-700 group-hover:scale-105"
                             />
                         </div>
                     </div>

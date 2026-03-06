@@ -14,14 +14,13 @@
   html {
     font-family: "Inter Variable", system-ui, sans-serif;
   }
-  
+
   body {
     margin: 0;
     padding: 0;
-    background: #0A0F1F;
-    color: white;
+    min-height: 100vh;
   }
-  
+
   #root {
     min-height: 100vh;
   }
