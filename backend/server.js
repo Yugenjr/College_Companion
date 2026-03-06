@@ -46,6 +46,9 @@ const PORT = process.env.PORT || 5000;
 // Initialize services
 console.log('🚀 Initializing Backend Services...\n');
 
+// Start backup scheduler
+import './backup/backupScheduler.js';
+
 try {
   // Initialize MongoDB
   try {
@@ -147,6 +150,14 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/study-room-chat', studyRoomChatRoutes);
 app.use('/api/auction', auctionRoutes);
 app.use('/api/chat', chatRoutes);
+
+// Backup & disaster recovery routes
+import backupRoutes from './routes/backupRoutes.js';
+app.use('/api/backup', backupRoutes);
+
+// Audit log routes
+import auditRoutes from './routes/auditRoutes.js';
+app.use('/api/audit', auditRoutes);
 
 // Notification routes
 import notificationRoutes from './routes/notificationRoutes.js';
