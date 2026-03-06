@@ -1,32 +1,243 @@
 import Groq from 'groq-sdk';
+import CircuitBreaker from 'opossum';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 let groqClient = null;
-let fallbackGroqClient = null;
+let geminiModel = null;
+let groqCircuitBreaker = null;
+
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  initialDelayMs: 500,
+  backoffMultiplier: 2,
+};
+
+const CIRCUIT_BREAKER_CONFIG = {
+  timeout: 5000,
+  errorThresholdPercentage: 50,
+  resetTimeout: 10000,
+};
+
+const logEvent = (level, event, details = {}) => {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    level,
+    event,
+    service: 'ai-provider',
+    provider: 'groq-with-gemini-fallback',
+    ...details,
+  };
+
+  const serialized = JSON.stringify(payload);
+  if (level === 'error') {
+    console.error(serialized);
+  } else if (level === 'warn') {
+    console.warn(serialized);
+  } else {
+    console.log(serialized);
+  }
+};
+
+const sleep = (ms) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
+
+const normalizeError = (error) => {
+  if (error instanceof Error) {
+    return error;
+  }
+
+  if (typeof error === 'string') {
+    return new Error(error);
+  }
+
+  return new Error('Unknown AI provider error');
+};
+
+const sanitizeResponseText = (text) => {
+  if (!text) {
+    return '';
+  }
+
+  if (typeof text !== 'string') {
+    return String(text);
+  }
+
+  return text;
+};
+
+/**
+ * Architecture decision:
+ * Groq remains the primary provider for low latency, while Gemini is configured
+ * as a resilience fallback. We isolate provider calls behind one function
+ * (`generateAIResponse`) so controllers can remain unaware of outages and transport logic.
+ */
+const buildGroqRequest = (prompt, options = {}) => ({
+  model: options.model || 'llama-3.3-70b-versatile',
+  messages: options.messages || [{ role: 'user', content: prompt }],
+  temperature: options.temperature ?? 0.7,
+  max_tokens: options.max_tokens ?? 4096,
+  response_format: options.json ? { type: 'json_object' } : undefined,
+});
+
+const formatMessagesForFallback = (messages = [], fallbackPrompt = '') => {
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return fallbackPrompt;
+  }
+
+  return messages
+    .map((message) => {
+      const role = message?.role || 'user';
+      const content = message?.content || '';
+      return `[${role.toUpperCase()}]\n${content}`;
+    })
+    .join('\n\n');
+};
+
+const isCircuitOpenError = (error) => {
+  const normalized = normalizeError(error);
+  const message = normalized.message || '';
+  return normalized.code === 'EOPENBREAKER' || message.includes('Breaker is open');
+};
+
+const initializeCircuitBreaker = () => {
+  if (!groqClient) {
+    return null;
+  }
+
+  const groqAction = async (requestConfig) => {
+    const response = await groqClient.chat.completions.create(requestConfig);
+    return response.choices[0]?.message?.content || '';
+  };
+
+  groqCircuitBreaker = new CircuitBreaker(groqAction, CIRCUIT_BREAKER_CONFIG);
+
+  groqCircuitBreaker.on('open', () => {
+    logEvent('warn', 'circuit_open', {
+      timeout: CIRCUIT_BREAKER_CONFIG.timeout,
+      errorThresholdPercentage: CIRCUIT_BREAKER_CONFIG.errorThresholdPercentage,
+      resetTimeout: CIRCUIT_BREAKER_CONFIG.resetTimeout,
+    });
+  });
+
+  groqCircuitBreaker.on('halfOpen', () => {
+    logEvent('info', 'circuit_half_open');
+  });
+
+  groqCircuitBreaker.on('close', () => {
+    logEvent('info', 'circuit_closed');
+  });
+
+  groqCircuitBreaker.on('failure', (error) => {
+    const normalized = normalizeError(error);
+    logEvent('warn', 'groq_circuit_failure', { error: normalized.message });
+  });
+
+  return groqCircuitBreaker;
+};
+
+const initializeGeminiFallback = () => {
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+
+  if (!geminiApiKey) {
+    logEvent('warn', 'gemini_not_configured');
+    geminiModel = null;
+    return null;
+  }
+
+  try {
+    const genAI = new GoogleGenerativeAI(geminiApiKey);
+    geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    return geminiModel;
+  } catch (error) {
+    const normalized = normalizeError(error);
+    logEvent('error', 'gemini_init_failed', { error: normalized.message });
+    geminiModel = null;
+    return null;
+  }
+};
+
+const callGroqWithRetry = async (requestConfig) => {
+  if (!groqCircuitBreaker) {
+    throw new Error('Groq circuit breaker not initialized. Call initializeGroqClient() first.');
+  }
+
+  let lastError = null;
+
+  for (let attempt = 0; attempt <= RETRY_CONFIG.maxRetries; attempt += 1) {
+    try {
+      return await groqCircuitBreaker.fire(requestConfig);
+    } catch (error) {
+      lastError = normalizeError(error);
+
+      if (isCircuitOpenError(lastError)) {
+        throw lastError;
+      }
+
+      if (attempt < RETRY_CONFIG.maxRetries) {
+        const delayMs = RETRY_CONFIG.initialDelayMs * (RETRY_CONFIG.backoffMultiplier ** attempt);
+        logEvent('warn', 'retry_scheduled', {
+          provider: 'groq',
+          attempt: attempt + 1,
+          maxRetries: RETRY_CONFIG.maxRetries,
+          delayMs,
+          error: lastError.message,
+        });
+        await sleep(delayMs);
+      }
+    }
+  }
+
+  throw lastError || new Error('Groq request failed after retries');
+};
+
+const callGeminiFallback = async (prompt, options = {}) => {
+  if (!geminiModel) {
+    throw new Error('Gemini fallback is not configured');
+  }
+
+  const fallbackPrompt = formatMessagesForFallback(options.messages, prompt);
+  const result = await geminiModel.generateContent(fallbackPrompt);
+  const text = result?.response?.text?.() || '';
+
+  if (options.json && !text.trim()) {
+    throw new Error('Gemini returned an empty JSON response');
+  }
+
+  return sanitizeResponseText(text);
+};
+
+const extractJSONString = (textResponse) => {
+  let jsonText = textResponse.trim();
+
+  if (jsonText.startsWith('```json')) {
+    jsonText = jsonText.replace(/^```json\n/, '').replace(/\n```$/, '');
+  } else if (jsonText.startsWith('```')) {
+    jsonText = jsonText.replace(/^```\n/, '').replace(/\n```$/, '');
+  }
+
+  return jsonText;
+};
 
 /**
  * Initialize Groq SDK client with fallback support
  */
 export const initializeGroqClient = () => {
   const apiKey = process.env.GROQ_API_KEY;
-  const fallbackKey = process.env.GROQ_FALLBACK_API_KEY;
 
-  if (!apiKey && !fallbackKey) {
-    throw new Error('GROQ_API_KEY or GROQ_FALLBACK_API_KEY environment variable is required');
+  if (!apiKey) {
+    throw new Error('GROQ_API_KEY environment variable is required');
   }
 
-  // Initialize primary client
-  if (apiKey) {
-    groqClient = new Groq({ apiKey });
-  } else {
-    groqClient = new Groq({ apiKey: fallbackKey });
-  }
+  groqClient = new Groq({ apiKey });
+  initializeCircuitBreaker();
+  initializeGeminiFallback();
 
-  // Initialize fallback client if both keys are available
-  if (apiKey && fallbackKey && apiKey !== fallbackKey) {
-    fallbackGroqClient = new Groq({ apiKey: fallbackKey });
-  }
-
-  console.log('✅ Groq client initialized with fallback support');
+  logEvent('info', 'provider_initialized', {
+    groq: true,
+    geminiFallback: Boolean(geminiModel),
+    circuitBreaker: CIRCUIT_BREAKER_CONFIG,
+  });
   return groqClient;
 };
 
@@ -41,6 +252,46 @@ export const getGroqClient = () => {
 };
 
 /**
+ * Unified AI entrypoint.
+ *
+ * Architecture decision:
+ * - Primary path: Groq behind circuit breaker + exponential retry
+ * - Failover path: Gemini when Groq is unavailable, timing out, or circuit is open
+ *
+ * This keeps controller code stable while hardening reliability characteristics.
+ */
+export const generateAIResponse = async (prompt, options = {}) => {
+  if (!prompt || typeof prompt !== 'string') {
+    throw new Error('Prompt must be a non-empty string');
+  }
+
+  const requestConfig = buildGroqRequest(prompt, options);
+
+  try {
+    const groqText = await callGroqWithRetry(requestConfig);
+    return sanitizeResponseText(groqText);
+  } catch (groqError) {
+    const normalizedGroqError = normalizeError(groqError);
+    logEvent('warn', 'fallback_activated', {
+      from: 'groq',
+      to: 'gemini',
+      reason: normalizedGroqError.message,
+    });
+
+    try {
+      return await callGeminiFallback(prompt, options);
+    } catch (geminiError) {
+      const normalizedGeminiError = normalizeError(geminiError);
+      logEvent('error', 'providers_exhausted', {
+        groqError: normalizedGroqError.message,
+        geminiError: normalizedGeminiError.message,
+      });
+      throw new Error(`AI generation failed: Groq(${normalizedGroqError.message}) | Gemini(${normalizedGeminiError.message})`);
+    }
+  }
+};
+
+/**
  * Generate completion using Groq with automatic fallback
  * @param {string} systemPrompt - System instructions
  * @param {string} userPrompt - User message
@@ -48,39 +299,14 @@ export const getGroqClient = () => {
  * @returns {Promise<string>} - Generated text
  */
 export const generateCompletion = async (systemPrompt, userPrompt, options = {}) => {
-  const requestConfig = {
-    model: options.model || 'llama-3.3-70b-versatile',
+  const prompt = `${systemPrompt}\n\n${userPrompt}`;
+  return await generateAIResponse(prompt, {
+    ...options,
     messages: [
       { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt }
+      { role: 'user', content: userPrompt },
     ],
-    temperature: options.temperature || 0.7,
-    max_tokens: options.max_tokens || 4096,
-    response_format: options.json ? { type: 'json_object' } : undefined,
-  };
-
-  try {
-    const client = getGroqClient();
-    const response = await client.chat.completions.create(requestConfig);
-    return response.choices[0]?.message?.content || '';
-  } catch (error) {
-    console.error('❌ Groq API error (primary):', error.message);
-
-    // Try fallback client if available
-    if (fallbackGroqClient) {
-      try {
-        console.log('🔄 Retrying with fallback Groq API key...');
-        const response = await fallbackGroqClient.chat.completions.create(requestConfig);
-        console.log('✅ Fallback Groq API succeeded');
-        return response.choices[0]?.message?.content || '';
-      } catch (fallbackError) {
-        console.error('❌ Groq API error (fallback):', fallbackError.message);
-        throw new Error(`Groq API failed (both primary and fallback): ${fallbackError.message}`);
-      }
-    }
-
-    throw new Error(`Groq API failed: ${error.message}`);
-  }
+  });
 };
 
 /**
@@ -98,20 +324,12 @@ export const generateJSONCompletion = async (systemPrompt, userPrompt, options =
       { ...options, json: true }
     );
 
-    // Try to parse JSON, handling markdown code blocks
-    let jsonText = textResponse.trim();
-
-    // Remove markdown code blocks if present
-    if (jsonText.startsWith('```json')) {
-      jsonText = jsonText.replace(/^```json\n/, '').replace(/\n```$/, '');
-    } else if (jsonText.startsWith('```')) {
-      jsonText = jsonText.replace(/^```\n/, '').replace(/\n```$/, '');
-    }
-
+    const jsonText = extractJSONString(textResponse);
     return JSON.parse(jsonText);
   } catch (error) {
-    console.error('❌ Groq JSON parsing error:', error.message);
-    throw new Error(`Failed to parse Groq JSON response: ${error.message}`);
+    const normalized = normalizeError(error);
+    logEvent('error', 'json_parse_failed', { error: normalized.message });
+    throw new Error(`Failed to parse AI JSON response: ${normalized.message}`);
   }
 };
 
@@ -155,13 +373,7 @@ Syllabus: ${syllabus}`;
 
   const response = await generateCompletion(systemPrompt, userPrompt, { json: true });
 
-  let jsonText = response.trim();
-  if (jsonText.startsWith('```json')) {
-    jsonText = jsonText.replace(/^```json\n/, '').replace(/\n```$/, '');
-  } else if (jsonText.startsWith('```')) {
-    jsonText = jsonText.replace(/^```\n/, '').replace(/\n```$/, '');
-  }
-
+  const jsonText = extractJSONString(response);
   return JSON.parse(jsonText);
 };
 
@@ -205,13 +417,7 @@ Return JSON in this format:
 
   const response = await generateCompletion(systemPrompt, userPrompt, { json: true });
 
-  let jsonText = response.trim();
-  if (jsonText.startsWith('```json')) {
-    jsonText = jsonText.replace(/^```json\n/, '').replace(/\n```$/, '');
-  } else if (jsonText.startsWith('```')) {
-    jsonText = jsonText.replace(/^```\n/, '').replace(/\n```$/, '');
-  }
-
+  const jsonText = extractJSONString(response);
   return JSON.parse(jsonText);
 };
 
@@ -236,6 +442,7 @@ Provide actionable advice including:
 export default {
   initializeGroqClient,
   getGroqClient,
+  generateAIResponse,
   generateCompletion,
   generateJSONCompletion,
   generateGroqResponse,

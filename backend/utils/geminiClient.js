@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { getGroqClient } from '../services/groqService.js';
+import { generateAIResponse as generateUnifiedAIResponse } from '../services/groqService.js';
 
 /**
  * Initialize Google Gemini AI Client
@@ -49,95 +49,36 @@ export const getGeminiVision = () => {
 };
 
 /**
- * Generate text response with Gemini (with Groq fallback)
+ * Generate text response through the unified resilient provider.
+ *
+ * Architecture decision:
+ * We delegate text generation to `groqService.generateAIResponse` so retries,
+ * circuit breaker behavior, and fallback orchestration are implemented once
+ * in a single production path while preserving this module's public API.
  */
 export const generateAIResponse = async (prompt, options = {}) => {
-  try {
-    console.log('✨ Calling Gemini...');
-    
-    if (!geminiText) {
-      throw new Error('Gemini not available');
-    }
-
-    const result = await geminiText.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
-    
-    console.log('✅ Gemini response received');
-    return text;
-  } catch (geminiError) {
-    console.warn('⚠️  Gemini failed, switching to Groq fallback:', geminiError.message);
-    
-    try {
-      const groqClient = getGroqClient();
-      const groqResponse = await groqClient.chat.completions.create({
-        model: "llama-3.1-70b-versatile",
-        messages: [{ role: "user", content: prompt }],
-        temperature: options.temperature || 0.2,
-        max_tokens: options.max_tokens || 4096,
-      });
-      
-      console.log('✅ Groq fallback response received');
-      return groqResponse.choices[0].message.content;
-    } catch (groqError) {
-      console.error('❌ Both Gemini and Groq failed:', groqError.message);
-      throw new Error(`AI generation failed: ${groqError.message}`);
-    }
-  }
+  return await generateUnifiedAIResponse(prompt, options);
 };
 
 /**
  * Generate response with message history (for chat-like interactions)
  */
 export const generateAIResponseWithHistory = async (messages, options = {}) => {
-  try {
-    console.log('✨ Calling Gemini with message history...');
-    
-    if (!geminiText) {
-      throw new Error('Gemini not available');
-    }
-
-    // Convert messages to Gemini format
-    const formattedMessages = messages.map(msg => {
-      if (msg.role === 'system') {
-        return { role: 'user', parts: [{ text: `[System]: ${msg.content}` }] };
-      }
-      return {
-        role: msg.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: msg.content }]
-      };
-    });
-
-    // Gemini uses chat interface for multi-turn conversations
-    const chat = geminiText.startChat({
-      history: formattedMessages.slice(0, -1),
-    });
-
-    const lastMessage = messages[messages.length - 1];
-    const result = await chat.sendMessage(lastMessage.content);
-    const text = result.response.text();
-    
-    console.log('✅ Gemini chat response received');
-    return text;
-  } catch (geminiError) {
-    console.warn('⚠️  Gemini failed, switching to Groq fallback:', geminiError.message);
-    
-    try {
-      const groqClient = getGroqClient();
-      const groqResponse = await groqClient.chat.completions.create({
-        model: "llama-3.1-70b-versatile",
-        messages: messages,
-        temperature: options.temperature || 0.2,
-        max_tokens: options.max_tokens || 4096,
-      });
-      
-      console.log('✅ Groq fallback response received');
-      return groqResponse.choices[0].message.content;
-    } catch (groqError) {
-      console.error('❌ Both Gemini and Groq failed:', groqError.message);
-      throw new Error(`AI generation failed: ${groqError.message}`);
-    }
+  const safeMessages = Array.isArray(messages) ? messages : [];
+  if (safeMessages.length === 0) {
+    throw new Error('Message history must be a non-empty array');
   }
+
+  const prompt = safeMessages.length > 0
+    ? safeMessages
+      .map((message) => `[${message?.role || 'user'}]\n${message?.content || ''}`)
+      .join('\n\n')
+    : '';
+
+  return await generateUnifiedAIResponse(prompt, {
+    ...options,
+    messages: safeMessages,
+  });
 };
 
 /**
