@@ -153,6 +153,16 @@ export const initializeSocketIO = (httpServer) => {
         if (!chat) {
           return socket.emit('error', { message: 'Room not found' });
         }
+      try {
+        if (!text || !text.trim()) {
+          return socket.emit('error', { message: 'Message cannot be empty' });
+        }
+
+        // Save user message to MongoDB
+        const chat = await StudyRoomChat.findOne({ roomId });
+        if (!chat) {
+          return socket.emit('error', { message: 'Room not found' });
+        }
 
         const userMessage = {
           sender: 'user',
@@ -163,17 +173,21 @@ export const initializeSocketIO = (httpServer) => {
         };
 
         chat.messages.push(userMessage);
-        await chat.save();
+        try {
+          await chat.save();
+        } catch (dbError) {
+          console.error('❌ Failed to save message:', dbError);
+          io.to(roomId).emit('chat:error', { message: 'A user message failed to save and will not appear in history.' });
+          return socket.emit('error', { message: 'Failed to save message to database' });
+        }
 
-        // Broadcast user message to all room members
+        // Only broadcast after successful save
         io.to(roomId).emit('chat:message', userMessage);
-
         console.log(`💬 Message in ${roomId} from ${userName}: ${text.substring(0, 50)}...`);
 
         // Get AI response
         try {
           console.log('🤖 Calling AI for response...');
-          
           // Prepare context from recent messages
           const recentMessages = chat.messages.slice(-10);
           const context = recentMessages
@@ -205,23 +219,26 @@ export const initializeSocketIO = (httpServer) => {
           };
 
           chat.messages.push(aiMessage);
-          await chat.save();
+          try {
+            await chat.save();
+          } catch (dbError) {
+            console.error('❌ Failed to save AI message:', dbError);
+            io.to(roomId).emit('chat:error', { message: 'AI response failed to save and will not appear in history.' });
+            return socket.emit('error', { message: 'Failed to save AI message to database' });
+          }
 
-          // Broadcast AI response to all room members
+          // Only broadcast after successful save
           io.to(roomId).emit('chat:aiResponse', aiMessage);
-
           console.log(`🤖 AI responded in ${roomId}`);
 
         } catch (aiError) {
           console.error('❌ AI response error:', aiError);
-          
           // Send fallback message
           const fallbackMessage = {
             sender: 'assistant',
             text: 'Sorry, I\'m having trouble responding right now. Please try again.',
             timestamp: new Date()
           };
-          
           io.to(roomId).emit('chat:aiResponse', fallbackMessage);
         }
 
@@ -229,13 +246,6 @@ export const initializeSocketIO = (httpServer) => {
         console.error('❌ Error handling message:', error);
         socket.emit('error', { message: 'Failed to send message' });
       }
-    });
-
-    // Handle typing indicator
-    socket.on('chat:typing', ({ roomId, userId, userName, isTyping }) => {
-      socket.to(roomId).emit('chat:userTyping', {
-        userId,
-        userName,
         isTyping
       });
     });
@@ -253,7 +263,15 @@ export const initializeSocketIO = (httpServer) => {
 
     // Handle disconnect
     socket.on('disconnect', () => {
-      if (socket.roomId && socket.userName) {
+      // Clean up socket data and leave rooms
+      if (socket.roomId) {
+        socket.leave(socket.roomId);
+        socket.roomId = null;
+      }
+      if (socket.userId) {
+        socket.leave(`user:${socket.userId}`);
+      }
+      if (socket.userName && socket.roomId) {
         socket.to(socket.roomId).emit('room:userLeft', {
           userId: socket.userId,
           userName: socket.userName,
@@ -261,6 +279,8 @@ export const initializeSocketIO = (httpServer) => {
         });
         console.log(`❌ ${socket.userName} disconnected from ${socket.roomId}`);
       }
+      // Remove all listeners for this socket
+      socket.removeAllListeners();
       console.log(`🔌 Socket disconnected: ${socket.id}`);
     });
   });
