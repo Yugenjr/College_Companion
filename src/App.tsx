@@ -18,7 +18,8 @@ import Landing from "./pages/Landing.jsx";
 import Pricing from "./pages/Pricing.jsx";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound.jsx";
-
+import FAQ from "./pages/FAQ";
+console.log("App loaded");
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +30,8 @@ function App() {
               {/* Landing Page */}
               <Route path="/" element={<Landing />} />
               <Route path="/pricing" element={<Pricing />} />
+              {/* FAQ page – wildcard ensures trailing slash or nested paths don’t fall through */}
+              <Route path="/faq/*" element={<FAQ />} />
 
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />

@@ -55,10 +55,10 @@ const LandingNavbar = () => {
         { name: 'Features', href: '/#features' },
         { name: 'How it Works', href: '/#how-it-works' },
         { name: 'Pricing', href: '/pricing' },
+        { name: 'FAQ', href: '/faq' }
     ];
 
-    const isPricingPage = location.pathname === '/pricing';
-
+    const isActivePage = location.pathname;
     return (
         <nav className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500 border-b ${isScrolled
             ? 'py-4 backdrop-blur-xl bg-black/70 border-white/10'
@@ -85,12 +85,12 @@ const LandingNavbar = () => {
                             onClick={(e) => handleNavClick(e, link.href)}
                             onMouseEnter={() => setHoveredTab(link.name)}
                             onMouseLeave={() => setHoveredTab(null)}
-                            className={`relative px-5 py-2 text-sm font-medium transition-colors duration-300 group ${(isPricingPage && link.name === 'Pricing') || (!isPricingPage && hoveredTab === link.name) ? 'text-white' : 'text-white/40'
+                            className={`relative px-5 py-2 text-sm font-medium transition-colors duration-300 group ${(isActivePage === link.href || hoveredTab === link.name) ? 'text-white' : 'text-white/40'
                                 }`}
                         >
                             <span className="relative z-10">{link.name}</span>
 
-                            {(hoveredTab === link.name || (isPricingPage && link.name === 'Pricing')) && (
+                            {(hoveredTab === link.name || isActivePage === link.href) && (
                                 <motion.div
                                     layoutId="nav-pill"
                                     className="absolute inset-0 bg-white/[0.06] rounded-xl -z-0 shadow-inner"
