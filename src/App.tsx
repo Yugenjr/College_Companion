@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
 import Pricing from "./pages/Pricing.jsx";
+import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
                 <Route path="/study-arena" element={<StudyArenaHub />} />
                 <Route path="/study-arena/room/:roomCode" element={<RoomPage />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
               </Route>
 
               {/* Catch all - Show 404 Page */}
