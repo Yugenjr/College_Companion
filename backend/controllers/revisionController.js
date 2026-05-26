@@ -60,6 +60,22 @@ Return JSON in this format:
 
     await revisionPlan.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId}`).emit('notification:receive', {
+        type: 'revision',
+        title: 'Revision Plan Ready',
+        body: 'Your personalized revision plan has been generated.',
+        data: plan,
+        source: 'revision',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send revision notification:', notifyError.message);
+    }
+
     res.json({
       success: true,
       plan,

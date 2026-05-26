@@ -1,4 +1,6 @@
 import { getAuth } from '../config/firebaseAdmin.js';
+import User from '../models/User.js';
+import { DEFAULT_ROLE, normalizeRole } from './rbac.js';
 
 /**
  * Middleware to verify Firebase ID token
@@ -35,7 +37,15 @@ export const verifyFirebaseToken = async (req, res, next) => {
       uid: decodedToken.uid,
       email: decodedToken.email,
       emailVerified: decodedToken.email_verified,
+      role: DEFAULT_ROLE,
+      roleVerifiedFromDb: false
     };
+
+    const dbUser = await User.findOne({ uid: decodedToken.uid }).select('role').lean();
+    if (dbUser?.role) {
+      req.user.role = normalizeRole(dbUser.role);
+      req.user.roleVerifiedFromDb = true;
+    }
 
     next();
   } catch (error) {
@@ -76,7 +86,15 @@ export const optionalAuth = async (req, res, next) => {
         uid: decodedToken.uid,
         email: decodedToken.email,
         emailVerified: decodedToken.email_verified,
+        role: DEFAULT_ROLE,
+        roleVerifiedFromDb: false
       };
+
+      const dbUser = await User.findOne({ uid: decodedToken.uid }).select('role').lean();
+      if (dbUser?.role) {
+        req.user.role = normalizeRole(dbUser.role);
+        req.user.roleVerifiedFromDb = true;
+      }
     }
 
     next();

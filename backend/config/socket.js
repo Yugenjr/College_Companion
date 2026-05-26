@@ -24,8 +24,37 @@ export const initializeSocketIO = (httpServer) => {
     }
   });
 
-  io.on('connection', (socket) => {
+  // Firebase token verification helper
+  async function verifySocketToken(token) {
+    if (!token) throw new Error('No token provided');
+    const { getAuth } = await import('../config/firebaseAdmin.js');
+    return await getAuth().verifyIdToken(token);
+  }
+
+  io.on('connection', async (socket) => {
     console.log(`🔌 Socket connected: ${socket.id}`);
+
+    // Authenticate on connect (token in handshake query)
+    let userAuth = null;
+    const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+    if (token) {
+      try {
+        userAuth = await verifySocketToken(token);
+        socket.userId = userAuth.uid;
+        socket.userEmail = userAuth.email;
+        console.log(`✅ Authenticated socket for user: ${userAuth.uid}`);
+      } catch (authError) {
+        console.warn('❌ Invalid socket token:', authError.message);
+        socket.emit('error', { message: 'Authentication failed' });
+        socket.disconnect();
+        return;
+      }
+    } else {
+      console.warn('❌ No token provided for socket connection');
+      socket.emit('error', { message: 'No authentication token' });
+      socket.disconnect();
+      return;
+    }
 
     // Join a study room
     socket.on('room:join', async ({ roomId, userId, userName }) => {
@@ -62,8 +91,68 @@ export const initializeSocketIO = (httpServer) => {
       }
     });
 
+    // User-specific notification
+    socket.on('notification:user', async ({ userId, type, title, body, data, source }) => {
+      try {
+        // Save notification to DB
+        const notification = new Notification({ userId, type, title, body, data, source });
+        await notification.save();
+        // Emit to user channel
+        io.to(`user:${userId}`).emit('notification:receive', notification);
+      } catch (error) {
+        console.error('❌ Error sending user notification:', error);
+      }
+    });
+
+    // Group broadcast notification
+    socket.on('notification:group', async ({ group, type, title, body, data, source }) => {
+      try {
+        // Save notification to DB for each user in group (assume group is array of userIds)
+        if (Array.isArray(group)) {
+          for (const userId of group) {
+            const notification = new Notification({ userId, type, title, body, data, group: group.join(','), source });
+            await notification.save();
+            io.to(`user:${userId}`).emit('notification:receive', notification);
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error sending group notification:', error);
+      }
+    });
+
+    // System-wide notification
+    socket.on('notification:system', async ({ type, title, body, data, source }) => {
+      try {
+        // Emit to all connected clients
+        io.emit('notification:receive', { type, title, body, data, source, createdAt: new Date() });
+      } catch (error) {
+        console.error('❌ Error sending system notification:', error);
+      }
+    });
+
+    // Join user-specific channel for notifications (token required)
+    socket.on('user:subscribe', async ({ token }) => {
+      try {
+        const auth = await verifySocketToken(token);
+        socket.join(`user:${auth.uid}`);
+        console.log(`🔔 User ${auth.uid} subscribed to notifications.`);
+      } catch (err) {
+        socket.emit('error', { message: 'Subscription authentication failed' });
+      }
+    });
+
     // Handle chat message from user
     socket.on('chat:send', async ({ roomId, userId, userName, text }) => {
+      try {
+        if (!text || !text.trim()) {
+          return socket.emit('error', { message: 'Message cannot be empty' });
+        }
+
+        // Save user message to MongoDB
+        const chat = await StudyRoomChat.findOne({ roomId });
+        if (!chat) {
+          return socket.emit('error', { message: 'Room not found' });
+        }
       try {
         if (!text || !text.trim()) {
           return socket.emit('error', { message: 'Message cannot be empty' });
@@ -84,17 +173,21 @@ export const initializeSocketIO = (httpServer) => {
         };
 
         chat.messages.push(userMessage);
-        await chat.save();
+        try {
+          await chat.save();
+        } catch (dbError) {
+          console.error('❌ Failed to save message:', dbError);
+          io.to(roomId).emit('chat:error', { message: 'A user message failed to save and will not appear in history.' });
+          return socket.emit('error', { message: 'Failed to save message to database' });
+        }
 
-        // Broadcast user message to all room members
+        // Only broadcast after successful save
         io.to(roomId).emit('chat:message', userMessage);
-
         console.log(`💬 Message in ${roomId} from ${userName}: ${text.substring(0, 50)}...`);
 
         // Get AI response
         try {
           console.log('🤖 Calling AI for response...');
-          
           // Prepare context from recent messages
           const recentMessages = chat.messages.slice(-10);
           const context = recentMessages
@@ -126,23 +219,26 @@ export const initializeSocketIO = (httpServer) => {
           };
 
           chat.messages.push(aiMessage);
-          await chat.save();
+          try {
+            await chat.save();
+          } catch (dbError) {
+            console.error('❌ Failed to save AI message:', dbError);
+            io.to(roomId).emit('chat:error', { message: 'AI response failed to save and will not appear in history.' });
+            return socket.emit('error', { message: 'Failed to save AI message to database' });
+          }
 
-          // Broadcast AI response to all room members
+          // Only broadcast after successful save
           io.to(roomId).emit('chat:aiResponse', aiMessage);
-
           console.log(`🤖 AI responded in ${roomId}`);
 
         } catch (aiError) {
           console.error('❌ AI response error:', aiError);
-          
           // Send fallback message
           const fallbackMessage = {
             sender: 'assistant',
             text: 'Sorry, I\'m having trouble responding right now. Please try again.',
             timestamp: new Date()
           };
-          
           io.to(roomId).emit('chat:aiResponse', fallbackMessage);
         }
 
@@ -150,13 +246,6 @@ export const initializeSocketIO = (httpServer) => {
         console.error('❌ Error handling message:', error);
         socket.emit('error', { message: 'Failed to send message' });
       }
-    });
-
-    // Handle typing indicator
-    socket.on('chat:typing', ({ roomId, userId, userName, isTyping }) => {
-      socket.to(roomId).emit('chat:userTyping', {
-        userId,
-        userName,
         isTyping
       });
     });
@@ -174,7 +263,15 @@ export const initializeSocketIO = (httpServer) => {
 
     // Handle disconnect
     socket.on('disconnect', () => {
-      if (socket.roomId && socket.userName) {
+      // Clean up socket data and leave rooms
+      if (socket.roomId) {
+        socket.leave(socket.roomId);
+        socket.roomId = null;
+      }
+      if (socket.userId) {
+        socket.leave(`user:${socket.userId}`);
+      }
+      if (socket.userName && socket.roomId) {
         socket.to(socket.roomId).emit('room:userLeft', {
           userId: socket.userId,
           userName: socket.userName,
@@ -182,6 +279,8 @@ export const initializeSocketIO = (httpServer) => {
         });
         console.log(`❌ ${socket.userName} disconnected from ${socket.roomId}`);
       }
+      // Remove all listeners for this socket
+      socket.removeAllListeners();
       console.log(`🔌 Socket disconnected: ${socket.id}`);
     });
   });

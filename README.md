@@ -359,6 +359,17 @@ Want to contribute? Check out our [Contributing Guidelines](#-contributing) and 
 
 ---
 
+## Firestore Schema Refactor
+
+The Firestore schema for study rooms has been updated:
+- Typing status is now stored in each user document as `isTyping`.
+- Old `typing` node is still supported for backward compatibility.
+- See `MIGRATION_GUIDE.md` for migration steps and details.
+
+All CRUD operations have been refactored to support both schemas during the transition.
+
+---
+
 <div align="center">
 
 **Made with ❤️ for students, by students**

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { normalizeRole } from '../utils/roles.js';
 
 /**
  * USER-SCOPED DATA MODEL
@@ -97,10 +98,40 @@ const userSchema = new mongoose.Schema({
       answer: { type: String, default: '' },
       createdAt: { type: Date, default: Date.now }
     }]
+  },
+
+  // Authentication fields
+  password: { type: String, required: false },
+  role: {
+    type: String,
+    enum: ['student', 'moderator', 'admin'],
+    default: 'student',
+    set: (value) => normalizeRole(value)
   }
 }, {
   timestamps: true
 });
+
+userSchema.pre('validate', function (next) {
+  if (this.role) {
+    this.role = normalizeRole(this.role);
+  }
+  next();
+});
+
+// Password hashing middleware
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password') || !this.password) return next();
+  const bcrypt = await import('bcryptjs');
+  this.password = await bcrypt.default.hash(this.password, 10);
+  next();
+});
+
+// Password comparison method
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  const bcrypt = await import('bcryptjs');
+  return bcrypt.default.compare(candidatePassword, this.password);
+};
 
 const User = mongoose.model('User', userSchema);
 

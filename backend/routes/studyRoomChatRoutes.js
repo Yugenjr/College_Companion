@@ -1,6 +1,7 @@
 import express from 'express';
 import StudyRoomChat from '../models/StudyRoomChat.js';
 import { verifyFirebaseToken } from '../middleware/auth.js';
+import { authorizeRoles } from '../middleware/rbac.js';
 
 const router = express.Router();
 
@@ -37,9 +38,9 @@ router.get('/:roomId', verifyFirebaseToken, async (req, res) => {
 
 /**
  * DELETE /api/study-room-chat/:roomId
- * Clear chat history for a room (admin only)
+ * Clear chat history for a room (moderator/admin)
  */
-router.delete('/:roomId', verifyFirebaseToken, async (req, res) => {
+router.delete('/:roomId', verifyFirebaseToken, authorizeRoles('moderator'), async (req, res) => {
   try {
     const { roomId } = req.params;
 

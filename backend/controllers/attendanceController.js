@@ -148,6 +148,22 @@ Provide attendance advice in JSON format.`;
 
     await attendanceQuery.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId}`).emit('notification:receive', {
+        type: 'attendance',
+        title: 'Attendance Advice Ready',
+        body: advice.reasoning || 'Your attendance advice is available.',
+        data: advice,
+        source: 'attendance',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send attendance notification:', notifyError.message);
+    }
+
     console.log(`✅ Attendance query processed for user: ${userId}`);
 
     res.json({
@@ -174,7 +190,6 @@ export const getAttendanceHistory = async (req, res) => {
   try {
     const { userId } = req.query;
 
-    if (!userId) {
       return res.status(400).json({
         success: false,
         error: 'Missing userId parameter',
@@ -187,6 +202,7 @@ export const getAttendanceHistory = async (req, res) => {
       .select('-context -__v'); // Exclude large context object
 
     res.json({
+    try {
       success: true,
       history,
       count: history.length,

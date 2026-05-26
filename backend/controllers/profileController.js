@@ -10,33 +10,34 @@ export const getMyProfile = async (req, res) => {
   try {
     const { uid, email } = req.user;
 
-    // Try to find existing profile
-    let profile = await UserProfile.findOne({ firebaseUid: uid });
-
-    // If profile doesn't exist, create it
-    if (!profile) {
-      profile = await UserProfile.create({
-        firebaseUid: uid,
-        email: email || '',
-        name: '',
-        phone: '',
-        department: '',
-        year: '',
-        section: '',
-        registerNumber: '',
-        semester: 1,
-        subjects: [],
-        settings: {
-          darkMode: false,
-          notifications: {
-            essentialAlerts: true,
-            studyReminders: true,
-            timetableChanges: true,
+    // Use findOneAndUpdate with upsert and $setOnInsert to avoid race conditions
+    const profile = await UserProfile.findOneAndUpdate(
+      { firebaseUid: uid },
+      {
+        $setOnInsert: {
+          firebaseUid: uid,
+          email: email || '',
+          name: '',
+          phone: '',
+          department: '',
+          year: '',
+          section: '',
+          registerNumber: '',
+          semester: 1,
+          subjects: [],
+          settings: {
+            darkMode: false,
+            notifications: {
+              essentialAlerts: true,
+              studyReminders: true,
+              timetableChanges: true,
+            },
+            language: 'en',
           },
-          language: 'en',
-        },
-      });
-    }
+        }
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
 
     res.status(200).json({
       success: true,
@@ -107,6 +108,22 @@ export const updateProfile = async (req, res) => {
       message: 'Profile updated successfully',
       profile: profile.toSafeObject(),
     });
+
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${uid}`).emit('notification:receive', {
+        type: 'profile',
+        title: 'Profile Updated',
+        body: 'Your profile has been updated successfully.',
+        data: profile.toSafeObject(),
+        source: 'profile',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send profile notification:', notifyError.message);
+    }
   } catch (error) {
     console.error('Error in updateProfile:', error);
     res.status(500).json({

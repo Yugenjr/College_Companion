@@ -1,6 +1,8 @@
 import express from 'express';
 import User from '../models/User.js';
 import { getAuth, getDb } from '../services/firebase/index.js';
+import { verifyFirebaseToken } from '../middleware/auth.js';
+import { authorizeRoles } from '../middleware/rbac.js';
 
 const router = express.Router();
 
@@ -194,7 +196,7 @@ router.post('/:id/onboarding', async (req, res) => {
 });
 
 // DELETE /api/users/:id - Delete user by Firebase UID or MongoDB ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyFirebaseToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -266,7 +268,7 @@ router.put('/:uid/personalDetails', async (req, res) => {
 });
 
 // PUT /api/users/:uid/settings - Update user settings
-router.put('/:uid/settings', async (req, res) => {
+router.put('/:uid/settings', verifyFirebaseToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const { uid } = req.params;
     const user = await User.findOne({ firebaseUID: uid });

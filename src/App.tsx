@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { RoomProvider } from "./contexts/RoomContext";
@@ -19,6 +19,10 @@ import Pricing from "./pages/Pricing.jsx";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsConditions from "./pages/Legal/TermsConditions";
 
+import CookiePolicy from "./pages/CookiePolicy";
+import NotFound from "./pages/NotFound.jsx";
+import FAQ from "./pages/FAQ";
+console.log("App loaded");
 function App() {
   return (
     <BrowserRouter>
@@ -29,12 +33,16 @@ function App() {
               {/* Landing Page */}
               <Route path="/" element={<Landing />} />
               <Route path="/pricing" element={<Pricing />} />
+              {/* FAQ page – wildcard ensures trailing slash or nested paths don’t fall through */}
+              <Route path="/faq/*" element={<FAQ />} />
 
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
 
               {/* Onboarding - Protected */}
               <Route path="/onboarding" element={
@@ -56,10 +64,11 @@ function App() {
                 <Route path="/study-arena" element={<StudyArenaHub />} />
                 <Route path="/study-arena/room/:roomCode" element={<RoomPage />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
               </Route>
 
-              {/* Catch all - redirect to login */}
-              <Route path="*" element={<Navigate to="/login" replace />} />
+              {/* Catch all - Show 404 Page */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </RoomProvider>
         </AuthProvider>

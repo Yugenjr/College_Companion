@@ -109,6 +109,22 @@ Return ONLY valid JSON in this exact format:
 
     await essentialsDoc.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId}`).emit('notification:receive', {
+        type: 'essentials',
+        title: 'Essentials Extracted',
+        body: 'Your semester essentials have been extracted and saved.',
+        data: essentials,
+        source: 'essentials',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send essentials notification:', notifyError.message);
+    }
+
     // Cleanup temporary file
     cleanupFile(filePath);
 

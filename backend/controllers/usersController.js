@@ -16,36 +16,43 @@ export const createUser = async (req, res) => {
       });
     }
 
-    // Check if user already exists (by UID or Email)
-    const existingUser = await User.findOne({
-      $or: [{ uid }, ...(email ? [{ email }] : [])]
-    });
+    // Use findOneAndUpdate with upsert and $setOnInsert to avoid race conditions
+    const user = await User.findOneAndUpdate(
+      { uid },
+      {
+        $setOnInsert: {
+          _id: uid,
+          uid: uid,
+          email: email || undefined,
+          profile: {
+            name: name || '',
+            email: email
+          }
+        }
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
 
-    if (existingUser) {
-      return res.json({
-        success: true,
-        message: 'User already exists',
-        user: existingUser
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${uid}`).emit('notification:receive', {
+        type: 'user',
+        title: 'Welcome!',
+        body: 'Your user account has been created successfully.',
+        data: user,
+        source: 'user',
+        createdAt: new Date()
       });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send user creation notification:', notifyError.message);
     }
-
-    // Create new user with root-level email
-    const newUser = new User({
-      _id: uid,
-      uid: uid,
-      email: email || undefined, // undefined tells Mongo to ignore (sparse index friendly)
-      profile: {
-        name: name || '',
-        email: email // Keep for backward compatibility
-      }
-    });
-
-    await newUser.save();
 
     res.json({
       success: true,
-      message: 'User created successfully',
-      user: newUser
+      message: 'User created or found successfully',
+      user
     });
   } catch (error) {
     // Handle duplicate key errors gracefully

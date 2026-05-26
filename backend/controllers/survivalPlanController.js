@@ -62,6 +62,22 @@ export const generate = async (req, res) => {
 
     await survivalPlan.save();
 
+    // Trigger notification via Socket.IO (if available)
+    try {
+      const { getIO } = await import('../config/socket.js');
+      const io = getIO();
+      io.to(`user:${userId || 'anonymous'}`).emit('notification:receive', {
+        type: 'survival',
+        title: 'Survival Plan Generated',
+        body: 'Your personalized survival plan has been generated and saved.',
+        data: generatedPlan,
+        source: 'survival',
+        createdAt: new Date()
+      });
+    } catch (notifyError) {
+      console.warn('⚠️  Could not send survival plan notification:', notifyError.message);
+    }
+
     console.log('✅ Survival plan generated and saved');
 
     res.status(200).json({
