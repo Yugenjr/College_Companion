@@ -16,6 +16,9 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Landing from "./pages/Landing.jsx";
 import Pricing from "./pages/Pricing.jsx";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsConditions from "./pages/Legal/TermsConditions";
+
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound.jsx";
 import FAQ from "./pages/FAQ";
@@ -37,6 +40,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/cookie-policy" element={<CookiePolicy />} />
 
