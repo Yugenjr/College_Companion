@@ -212,6 +212,165 @@ html.light .opacity-50 {
   /* Secondary text color */
 }
 
+/* Hero section specific fixes */
+html.light .bg-white\/5 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .border-white\/10 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-black\/40 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-black\/80 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .border-white\/5 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Fix specific hero section elements */
+html.light section[class*="bg-black"] {
+  background-color: #ffffff !important;
+}
+
+html.light .text-white {
+  color: #000000 !important;
+}
+
+/* Preserve specific colored elements */
+html.light .text-blue-400 {
+  color: #2563eb !important;
+}
+
+html.light .text-purple-400 {
+  color: #7c3aed !important;
+}
+
+html.light .bg-blue-500\/20 {
+  background-color: rgba(37, 99, 235, 0.1) !important;
+}
+
+html.light .bg-purple-500\/20 {
+  background-color: rgba(124, 58, 237, 0.1) !important;
+}
+
+/* Additional Hero Section Fixes */
+html.light .btn-hero-secondary {
+  color: #000000 !important;
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .btn-hero-secondary:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Fix specific hero text elements */
+html.light .glass-card h4,
+html.light .glass-card p {
+  color: #000000 !important;
+}
+
+/* Fix scanning status badge */
+html.light .bg-black\/80 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Fix decorative cards text */
+html.light .glass-card .text-white {
+  color: #000000 !important;
+}
+
+html.light .glass-card .text-white\/30 {
+  color: #64748b !important;
+}
+
+/* Fix badge text */
+html.light .text-white\/40 {
+  color: #64748b !important;
+}
+
+html.light .text-white\/70 {
+  color: #374151 !important;
+}
+
+/* More comprehensive hero section fixes */
+html.light .text-white\/90 {
+  color: #111827 !important;
+}
+
+html.light .text-white\/95 {
+  color: #000000 !important;
+}
+
+/* Fix all gradient text in light mode */
+html.light .bg-gradient-to-r {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+}
+
+html.light .bg-gradient-to-r.from-blue-400.via-indigo-400.to-purple-400 {
+  background-image: linear-gradient(to right, #2563eb, #4f46e5, #7c3aed) !important;
+}
+
+/* Fix hero section backgrounds more comprehensively */
+html.light section.bg-black {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-black\/40 {
+  background-color: #f8fafc !important;
+}
+
+html.light .bg-white\/\[0\.02\] {
+  background-color: #ffffff !important;
+}
+
+/* Fix border colors */
+html.light .border-white\/10,
+html.light .border-white\/5 {
+  border-color: #e5e7eb !important;
+}
+
+/* Comprehensive white text fixes for hero section */
+html.light .font-black.text-white {
+  color: #000000 !important;
+}
+
+html.light .text-white.font-medium {
+  color: #374151 !important;
+}
+
+html.light .text-white.font-bold {
+  color: #111827 !important;
+}
+
+/* Fix specific hero elements */
+html.light .glass-card .font-bold {
+  color: #000000 !important;
+}
+
+html.light .glass-card .text-white\/40 {
+  color: #64748b !important;
+}
+
+html.light .glass-card .text-white\/30 {
+  color: #9ca3af !important;
+}
+
+/* Fix status badge */
+html.light .text-white\/40.uppercase {
+  color: #6b7280 !important;
+}
+
 /* Maintain blue/indigo accents but with light-mode contrast */
 html.light .text-blue-400 {
   color: #2563eb !important;
